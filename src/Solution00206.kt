@@ -16,6 +16,23 @@ class Solution00206 {
         return reverseListRecursive(nextNode, newNext)
     }
 
+    fun reverseListIterative(head: ListNode?): ListNode? {
+        if (head?.next == null) return head
+        var pre = head
+        var h = head.next
+
+        while (h != null) {
+            val newH = h.next
+            h.next = pre
+            pre = h
+            h = newH
+        }
+
+        // To prevent the cycle in the new tail
+        head.next = null
+        return pre
+    }
+
     fun reverseList(head: ListNode?): ListNode? {
         var counter = 0
         var newHead = head
@@ -38,4 +55,9 @@ class Solution00206 {
         newHead!!.next = null
         return result.next!!.next
     }
+}
+
+fun main() {
+    val s = Solution00206()
+    s.reverseListIterative(createListNodeFromArray(intArrayOf(1,2)))
 }
