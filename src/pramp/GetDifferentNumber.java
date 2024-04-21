@@ -34,7 +34,7 @@ public class GetDifferentNumber {
         }
 
         // For cases where min value is bigger than 0
-        if (minVal > 0) return minVal - 1;
+        if (minVal > 0) return 0;
 
         int result = 0;
         while (set.contains(result)) result++;
@@ -73,18 +73,21 @@ public class GetDifferentNumber {
         System.out.println(getDifferentNumber2(new int[]{0, 1, 2}));
         System.out.println(getDifferentNumber2(new int[]{1, 3, 0, 2}));
         System.out.println(getDifferentNumber2(new int[]{0, 5, 4, 1, 3, 6, 2}));
+        System.out.println(getDifferentNumber2(new int[]{1000000}));
         System.out.println();
 
         System.out.println(getDifferentNumber(new int[]{0}));
         System.out.println(getDifferentNumber(new int[]{0, 1, 2}));
         System.out.println(getDifferentNumber(new int[]{1, 3, 0, 2}));
         System.out.println(getDifferentNumber(new int[]{0, 5, 4, 1, 3, 6, 2}));
+        System.out.println(getDifferentNumber(new int[]{1000000}));
         System.out.println();
 
         System.out.println(getDifferentNumberImproved(new int[]{0}));
         System.out.println(getDifferentNumberImproved(new int[]{0, 1, 2}));
         System.out.println(getDifferentNumberImproved(new int[]{1, 3, 0, 2}));
         System.out.println(getDifferentNumberImproved(new int[]{0, 5, 4, 1, 3, 6, 2}));
+        System.out.println(getDifferentNumberImproved(new int[]{1000000}));
 
     }
 }
