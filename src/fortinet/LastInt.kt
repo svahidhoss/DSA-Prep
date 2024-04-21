@@ -6,8 +6,11 @@ import java.util.*
  * Description
  * ===
  * Given a pool of positive integers, we take the two largest integers from the pool.
- * Their difference (if any, as the two numbers can be the same) is placed back into the pool.
- * We repeat this process with the two currently largest integers from the pool until there is only one integer left in the pool (or when the pool is empty).
+ * Their difference (if any, as the two numbers can be the same) is
+ * placed back into the pool.
+ * We repeat this process with the two currently the largest integers
+ * from the pool until there is only one integer left in the pool
+ * (or when the pool is empty).
  *
  * What is the last remaining integer in the pool. Return 0 if there are no integers in the pool.
  *
@@ -21,18 +24,19 @@ import java.util.*
  *   [2]
  *   -> 1
  * 	[2,1]
+ * 	->
  * Input: pool = [1,2,3,6,7,7]
  * Output: 0
  *
  *   O(nlogn)
  *   logn
- *    7 - 7 = 0
+ *   7 - 7 = 0
  *   0,1,2,3,6
  *   6-3=3
  *   0,1,2,3,3
- *   0
+ *   3-3=0
  *   0,0,1,2
- *   1
+ *   2-1= 1
  *   0 0 1 1
  *   0
  *   0 0 0
@@ -58,9 +62,21 @@ fun lastInt(pool: List<Int>): Int {
     return maxHeap.poll() ?: 0
 }
 
+fun lastInt1(pool: List<Int>): Int {
+    val maxHeap = PriorityQueue<Int> { a, b -> b - a }.apply { addAll(pool) }
+    while (maxHeap.size > 1) {
+        val diff = maxHeap.poll() - maxHeap.poll()
+        if (diff > 0) maxHeap.add(diff)
+    }
+
+    return maxHeap.peek() ?: 0
+}
+
 fun main() {
     val pool = listOf(5, 7, 8, 9, 3, 2)
-    println(lastInt2(pool)) // Example output: 1
+    // println(lastInt2(pool)) // Example output: 1
+    println(lastInt(pool)) // Example output: 1
+    println(lastInt1(pool)) // Example output: 1
 }
 
 /**
