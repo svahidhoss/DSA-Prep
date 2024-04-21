@@ -1,6 +1,6 @@
 package pramp
 
-import java.util.PriorityQueue
+import java.util.*
 import kotlin.math.abs
 
 /**
@@ -16,7 +16,7 @@ fun absSort(arr: IntArray): IntArray {
         if (absCompare != 0) absCompare else a.compareTo(b)
     }*/
     val absHeap = PriorityQueue<Int> { a, b ->
-        if(abs(a) == abs(b)) a - b
+        if (abs(a) == abs(b)) a - b
         else abs(a) - abs(b)
     }
 
@@ -33,6 +33,16 @@ fun absSort(arr: IntArray): IntArray {
     return result
 }
 
+fun absSort1(arr: IntArray): IntArray {
+    return arr.sortedWith { a, b ->
+        if (abs(a) != abs(b)) abs(a) - abs(b)
+        else a - b
+    }.toIntArray()
+}
+
+/**
+ * Solution using two separate heaps.
+ */
 fun absSort2(arr: IntArray): IntArray {
     val posMinHeap = PriorityQueue<Int>()
     val negMaxHeap = PriorityQueue<Int> { a, b -> b - a }
@@ -82,10 +92,16 @@ fun absSort3(arr: IntArray): IntArray {
 
 fun main() {
     println(absSort(intArrayOf(2, -7, -2, -2, 0)).contentToString())
+    println(absSort1(intArrayOf(2, -7, -2, -2, 0)).contentToString())
     println(absSort(intArrayOf(-2, -1)).contentToString())
+    println(absSort1(intArrayOf(-2, -1)).contentToString())
     println(absSort(intArrayOf(0, 1, 2)).contentToString())
+    println(absSort1(intArrayOf(0, 1, 2)).contentToString())
     println(absSort(intArrayOf(2, -1, -1, -1)).contentToString())
+    println(absSort1(intArrayOf(2, -1, -1, -1)).contentToString())
     println(absSort(intArrayOf(-2, 3, 5, -1, 4)).contentToString())
+    println(absSort1(intArrayOf(-2, 3, 5, -1, 4)).contentToString())
 
     println(absSort(intArrayOf(-2, -1, 0, 1, 2)).joinToString(", ")) // Output: 0, -1, 1, -2, 2
+    println(absSort1(intArrayOf(-2, -1, 0, 1, 2)).joinToString(", ")) // Output: 0, -1, 1, -2, 2
 }

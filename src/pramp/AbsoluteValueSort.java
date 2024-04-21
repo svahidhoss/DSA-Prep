@@ -6,7 +6,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AbsoluteValueSort {
-    static int[] absSort2(int[] arr) {
+
+    static int[] absSort(int[] arr) {
+        // Convert the array of primitives to an array of Integer objects
+        Integer[] arrObjects = new Integer[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            arrObjects[i] = arr[i];
+        }
+
+        // Sort the array of Integer objects using a custom comparator
+        Arrays.sort(arrObjects, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                int absA = Math.abs(a);
+                int absB = Math.abs(b);
+                if (absA == absB) {
+                    return a - b; // Preserve the order of negative values before positive ones
+                }
+                return absA - absB;
+            }
+        });
+
+        // Convert the sorted array of Integer objects back to an array of primitives
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = arrObjects[i];
+        }
+
+        return arr;
+    }
+
+    static int[] absSort1(int[] arr) {
         // Convert int[] to Integer[] to use custom Comparator
         Integer[] arrObj = new Integer[arr.length];
         for (int i = 0; i < arr.length; i++) {
@@ -24,7 +53,7 @@ public class AbsoluteValueSort {
         return arr;
     }
 
-    static int[] absSort(int[] arr) {
+    static int[] absSort2(int[] arr) {
         // your code goes here
         if (arr.length <= 1) return arr;
 
@@ -75,7 +104,11 @@ public class AbsoluteValueSort {
     }
 
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(absSort2 (new int[]{-2, -2, 2, 5, -7})));
-        System.out.println(Arrays.toString(absSort2 (new int[]{-2, -2, 2, 5, -7})));
+        System.out.println(Arrays.toString(absSort(new int[]{-2, -2, 2, 5, -7})));
+        System.out.println(Arrays.toString(absSort1(new int[]{-2, -2, 2, 5, -7})));
+
+        int[] arr = {-2, 3, 1, -5, 4};
+        System.out.println(Arrays.toString(absSort(arr))); // Output should be [1, -2, 3, 4, -5]
+        System.out.println(Arrays.toString(absSort1(arr))); // Output should be [1, -2, 3, 4, -5]
     }
 }
