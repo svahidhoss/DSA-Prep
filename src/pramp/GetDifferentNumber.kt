@@ -21,6 +21,29 @@ fun getDifferentNumber(arr: IntArray): Int {
     // Every value is in its correct place
     return arr.size
 }
+
+
+fun getDifferentNumber2(arr: IntArray): Int {
+    arr.forEachIndexed { i, v ->
+        if (v != i && v < arr.size) {
+            arr[i] = arr[v]
+            arr[v] = v
+        }
+        // chances are we still need to put it in the correct place
+        while (arr[i] < i && arr[arr[i]] != arr[i]) {
+            val temp = arr[i]
+            arr[i] = arr[temp]
+            arr[temp] = temp
+        }
+    }
+
+    arr.forEachIndexed { i, v ->
+        if (v != i) return i
+    }
+
+    return arr.size
+}
+
 fun getDifferentNumber1(arr: IntArray): Int {
     val min = arr.min()
     if (min > 0) return 0
