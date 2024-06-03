@@ -1,4 +1,24 @@
+import java.util.ArrayDeque
+import java.util.Queue
+
 class Solution00226 {
+    fun invertTreeNew(root: TreeNode?): TreeNode? {
+        val queue: Queue<TreeNode> = ArrayDeque()
+        root?.let { queue.add(it) }
+        // Use a BFS approach
+        while (queue.isNotEmpty()) {
+            val currentNode = queue.poll()
+            // swap the right node with the left node
+            val temp = currentNode.left
+            currentNode.left = currentNode.right
+            currentNode.right = temp
+
+            currentNode.left?.let { queue.add(it) }
+            currentNode.right?.let { queue.add(it) }
+        }
+        return root
+    }
+
     fun invertTree(root: TreeNode?): TreeNode? {
         val queue = ArrayDeque<TreeNode>()
         root?.let { queue.add(it) }
@@ -21,12 +41,12 @@ class Solution00226 {
 
     fun invertTreeRecursive(root: TreeNode?): TreeNode? {
         if (root == null) return null
-//        if (root == null || (root.left == null && root.right == null)) return root
 
-        val invertedLeft = invertTreeRecursive(root.left)
-        val invertedRight = invertTreeRecursive(root.right)
-        root.left = invertedRight
-        root.right = invertedLeft
+        val newLeft = invertTreeRecursive(root.left)
+        val newRight = invertTreeRecursive(root.right)
+
+        root.left = newRight
+        root.right = newLeft
         return root
     }
 }
@@ -40,6 +60,7 @@ fun main() {
 
     tree.right!!.left = TreeNode(6)
     tree.right!!.right = TreeNode(9)
+    println(tree)
 
     val sol = Solution00226()
     var result = sol.invertTree(tree)
