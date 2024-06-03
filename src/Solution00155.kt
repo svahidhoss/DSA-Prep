@@ -54,6 +54,37 @@ class MinStack2 {
     }
 }
 
+class MinStack3() {
+    private val stack = ArrayDeque<Int>()
+    private val minStack = ArrayDeque<Int>()
+
+    fun push(`val`: Int) {
+        stack.add(`val`)
+        if (minStack.isEmpty() || `val` <= minStack.last()) minStack.add(`val`)
+    }
+
+    fun pop() {
+        if (stack.last() == minStack.last()) minStack.removeLast()
+        stack.removeLast()
+    }
+
+    fun top(): Int {
+        return stack.last()
+    }
+
+    fun getMin(): Int {
+        return minStack.last()
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = MinStack()
+ * obj.push(`val`)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
 fun main() {
     val minStack = MinStack2()
     minStack.push(-2)
