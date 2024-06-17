@@ -29,7 +29,7 @@ diff 3
 
 data class Answer(val a: Int?, val b: Int?, val diff: Int)
 
-fun smallestDiff2(array1: IntArray, array2: IntArray): Answer {
+fun smallestDiff(array1: IntArray, array2: IntArray): Answer {
 
     // Can sort the arrays in place?
     array1.sort()
@@ -45,11 +45,8 @@ fun smallestDiff2(array1: IntArray, array2: IntArray): Answer {
         val bValue = array2[q]
         val diff = Math.abs(aValue - bValue)
 
-        if (aValue >= bValue) {
-            q++
-        } else {
-            p++
-        }
+        if (aValue >= bValue) q++
+        else p++
 
         // update the min, c1 and c2 pair if there is an update
         if (diff < minDiff) {
@@ -63,7 +60,7 @@ fun smallestDiff2(array1: IntArray, array2: IntArray): Answer {
     return answer
 }
 
-fun smallestDiff(array1: IntArray, array2: IntArray): Answer {
+fun smallestDiff2(array1: IntArray, array2: IntArray): Answer {
     array1.sort()
     array2.sort()
 
@@ -77,11 +74,8 @@ fun smallestDiff(array1: IntArray, array2: IntArray): Answer {
         val bValue = array2[q]
         val diff = if (aValue > bValue) aValue.toLong() - bValue else bValue.toLong() - aValue // Prevent overflow
 
-        if (aValue >= bValue) {
-            q++
-        } else {
-            p++
-        }
+        if (aValue >= bValue) q++
+        else p++
 
         if (diff < minDiff) {
             minDiff = diff.toInt()
@@ -118,7 +112,7 @@ fun main() {
     println(result)
 
     A = intArrayOf(Int.MAX_VALUE)
-    B = intArrayOf(Int.MIN_VALUE+1)
+    B = intArrayOf(Int.MIN_VALUE)
     result = smallestDiff(A, B)
     println(result)
 

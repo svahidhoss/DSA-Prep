@@ -57,7 +57,7 @@ fun shortestCellPath(grid: Array<IntArray>, sr: Int, sc: Int, tr: Int, tc: Int):
     return -1
 }
 
-fun getAdjPoints(grid: Array<IntArray>, visited: Array<BooleanArray>, r: Int, c: Int): List<IntArray> {
+private fun getAdjPoints(grid: Array<IntArray>, visited: Array<BooleanArray>, r: Int, c: Int): List<IntArray> {
     return listOfNotNull(
         isValidPoint(grid, visited, r - 1, c) to intArrayOf(r - 1, c),
         isValidPoint(grid, visited, r + 1, c) to intArrayOf(r + 1, c),
@@ -67,7 +67,7 @@ fun getAdjPoints(grid: Array<IntArray>, visited: Array<BooleanArray>, r: Int, c:
         .map { it.second } // Map to the second value
 }
 
-fun isValidPoint(grid: Array<IntArray>, visited: Array<BooleanArray>, r: Int, c: Int): Boolean {
+private fun isValidPoint(grid: Array<IntArray>, visited: Array<BooleanArray>, r: Int, c: Int): Boolean {
     return r in grid.indices && c in grid[0].indices && !visited[r][c] && grid[r][c] == 1
 }
 
