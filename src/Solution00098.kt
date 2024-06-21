@@ -1,3 +1,39 @@
+class Solution00098 {
+    private var prev: Int? = null
+
+    /**
+     * Time and Space Complexity
+     * Time Complexity: O(n) where n is the number of nodes in the tree.
+     * Each node is visited exactly once.
+     *
+     * Space Complexity: O(h) where h is the height of the tree.
+     * This is due to the recursion stack. In the worst case (for a skewed tree),
+     * the space complexity is O(n). For a balanced tree, it is O(log n).
+     */
+    fun isValidBST(root: TreeNode?): Boolean {
+        if (root == null) return true
+        return inOrder(root)
+    }
+
+    private fun inOrder(root: TreeNode): Boolean {
+        // Traverse the left subtree
+        root.left?.let {
+            if (!inOrder(it)) return false
+        }
+
+        // Check the current node
+        if (prev != null && root.`val` <= prev!!) return false
+        prev = root.`val`
+
+        // Traverse the right subtree
+        root.right?.let {
+            if (!inOrder(it)) return false
+        }
+
+        return true
+    }
+}
+
 fun isValidBSTInOrder(root: TreeNode?): Boolean {
     val values = mutableListOf<Int>()
     inOrder(root, values)
@@ -35,25 +71,17 @@ fun isValidBSTWrong(root: TreeNode?): Boolean {
 }
 
 fun main() {
-    /**
-     *     2
-     *    / \
-     *   2   2
-     */
-    val root6 = TreeNode(2)
-    root6.left = TreeNode(2)
-    root6.right = TreeNode(2)
-    println(isValidBSTInOrder(root6)) // false
+    val s = Solution00098()
 
     /**
      *     2
      *    / \
      *   1   3
      */
-    val root1 = TreeNode(2)
-    root1.left = TreeNode(1)
-    root1.right = TreeNode(3)
-    println(isValidBSTInOrder(root1)) // true
+    var root = TreeNode(2)
+    root.left = TreeNode(1)
+    root.right = TreeNode(3)
+    println("${s.isValidBST(root)} expecting true") // true
 
     /**
      *     5
@@ -62,24 +90,24 @@ fun main() {
      *      / \
      *     3   6
      */
-    val root2 = TreeNode(5)
-    root2.left = TreeNode(1)
-    root2.right = TreeNode(4)
-    root2.right?.left = TreeNode(3)
-    root2.right?.right = TreeNode(6)
-    println(isValidBSTInOrder(root2)) // false
+    root = TreeNode(5)
+    root.left = TreeNode(1)
+    root.right = TreeNode(4)
+    root.right?.left = TreeNode(3)
+    root.right?.right = TreeNode(6)
+    println("${s.isValidBST(root)} expecting false") // false
 
     /**
      *     0
      *    /
      *  -1
      */
-    val root3 = TreeNode(0)
-    root3.left = TreeNode(-1)
-    println(isValidBSTInOrder(root3))
+    root = TreeNode(0)
+    root.left = TreeNode(-1)
+    println("${s.isValidBST(root)} expecting true") // true
 
-    val root4: TreeNode? = null
-    println(isValidBSTInOrder(root4)) // true
+
+    println("${s.isValidBST(null)} expecting true") // true
 
     /**
      *     5
@@ -89,11 +117,21 @@ fun main() {
      *     3   7
      *
      */
-    val root5 = TreeNode(5)
-    root5.left = TreeNode(4)
-    root5.right = TreeNode(6)
-    root5.right?.left = TreeNode(3)
-    root5.right?.right = TreeNode(7)
-    println(isValidBSTInOrder(root5)) // true
+    root = TreeNode(5)
+    root.left = TreeNode(4)
+    root.right = TreeNode(6)
+    root.right?.left = TreeNode(3)
+    root.right?.right = TreeNode(7)
+    println("${s.isValidBST(root)} expecting false") // false
 
+
+    /**
+     *     2
+     *    / \
+     *   2   2
+     */
+    root = TreeNode(2)
+    root.left = TreeNode(2)
+    root.right = TreeNode(2)
+    println("${s.isValidBST(root)} expecting false") // false
 }
