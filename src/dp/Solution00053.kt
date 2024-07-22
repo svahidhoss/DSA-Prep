@@ -1,10 +1,22 @@
 package dp
 
 class Solution00053 {
+    /**
+     * Brute fprce approach
+     * O(n^2)
+     */
     fun maxSubArray(nums: IntArray): Int {
-        val newNum = nums.mapIndexed { i, v -> if (i != 0) v + nums[i - 1] else v }
+        var result = Int.MIN_VALUE
+        var currentMax: Int
+        for (i in nums.indices) {
+            currentMax = 0
+            for (j in i  until nums.size) {
+                currentMax += nums[j]
+                if (currentMax > result) result = currentMax
+            }
+        }
 
-        return nums.max() - nums.min()
+        return result
     }
 }
 
