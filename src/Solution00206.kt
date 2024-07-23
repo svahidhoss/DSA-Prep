@@ -16,21 +16,56 @@ class Solution00206 {
         return reverseListRecursive(nextNode, newNext)
     }
 
+    /**
+     * Time complexity is O(n) where n is the number of nodes in the list,
+     * and the space complexity is O(1) as it only uses a constant amount of
+     * extra space regardless of the input size
+     */
     fun reverseListIterative(head: ListNode?): ListNode? {
+        // Base case: empty list or single node
         if (head?.next == null) return head
-        var pre = head
-        var h = head.next
 
-        while (h != null) {
-            val newH = h.next
-            h.next = pre
-            pre = h
-            h = newH
+        var currentNode = head
+        var nextNode = head.next
+
+        while (nextNode != null) {
+            // Store the next node's 'next' before we change it
+            val tempNext = nextNode.next
+
+            // Reverse the link
+            nextNode.next = currentNode
+
+            // Move the pointers one step forward
+            currentNode = nextNode
+            nextNode = tempNext
         }
 
-        // To prevent the cycle in the new tail
+        // Prevent a loop by setting original head's next to null
         head.next = null
-        return pre
+
+        // Return the new head (previously the last node)
+        return currentNode
+    }
+
+    fun reverseListPreserving(head: ListNode?): ListNode? {
+        // Base case: empty list or single node
+        if (head?.next == null) return head
+        var currentNode = head
+
+        var node: ListNode? = null
+        while (currentNode != null) {
+            // Create a new node based on current node's value
+            val newNode = ListNode(currentNode.`val`)
+
+            // Link the new node to the current reverse list
+            newNode.next = node
+            node = newNode
+
+            // Move to the next node in the original list
+            currentNode = currentNode.next
+        }
+
+        return node
     }
 
     fun reverseList(head: ListNode?): ListNode? {
@@ -59,5 +94,7 @@ class Solution00206 {
 
 fun main() {
     val s = Solution00206()
-    s.reverseListIterative(createListNodeFromArray(intArrayOf(1,2)))
+    println(s.reverseListPreserving(createListNodeFromArray(intArrayOf(1, 2, 3, 4, 5))))
+    println(s.reverseListPreserving(createListNodeFromArray(intArrayOf(1, 2))))
+    println(s.reverseListPreserving(createListNodeFromArray(intArrayOf())))
 }
