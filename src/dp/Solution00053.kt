@@ -1,19 +1,33 @@
 package dp
 
 class Solution00053 {
+
     /**
-     * Brute fprce approach
+     * Brute force approach
      * O(n^2)
      */
-    fun maxSubArray(nums: IntArray): Int {
+    fun maxSubArrayBruteForce(nums: IntArray): Int {
         var result = Int.MIN_VALUE
         var currentMax: Int
         for (i in nums.indices) {
             currentMax = 0
-            for (j in i  until nums.size) {
+            for (j in i until nums.size) {
                 currentMax += nums[j]
                 if (currentMax > result) result = currentMax
             }
+        }
+
+        return result
+    }
+
+    fun maxSubArray(nums: IntArray): Int {
+        var result = Int.MIN_VALUE
+        var currentMax = 0
+        for (v in nums) {
+            // reset it if the current sum is below zero
+            if (currentMax < 0) currentMax = 0
+            currentMax += v
+            result = Math.max(result, currentMax)
         }
 
         return result
