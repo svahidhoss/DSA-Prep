@@ -4,38 +4,50 @@ import TreeNode
 
 class Solution00572 {
     fun isSubtree(root: TreeNode?, subRoot: TreeNode?): Boolean {
-        if (isIdentical(root, subRoot)) return true
+        if (root == null) return (subRoot == null)
+        // An empty tree is always a subtree
+        if (subRoot == null) return true
 
-        return isSubtree(root?.left, subRoot) || isSubtree(root?.right, subRoot)
+        return if (isIdentical(root, subRoot)) true
+        else isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot)
     }
 
-    private fun isIdentical(root1: TreeNode?, root2: TreeNode?): Boolean {
-        if (root1 == null && root2 == null) return true
-//        if (root1 == null || root2 == null) return false
-        return root1?.`val` == root2?.`val`
-                && isIdentical(root1?.left, root2?.left)
-                && isIdentical(root1?.right, root2?.right)
-    }
-
-    fun isSubtree3(root: TreeNode?, subRoot: TreeNode?): Boolean {
-        if (root == null) return subRoot == null
-        if (isSame(root, subRoot)) return true
-
-        return (isSubtree3(root?.left, subRoot) || isSubtree3(root?.right, subRoot))
-    }
-
-    fun isSame(root: TreeNode?, subRoot: TreeNode?): Boolean {
+    private fun isIdentical(root: TreeNode?, subRoot: TreeNode?): Boolean {
         if (root == null && subRoot == null) return true
         if (root == null || subRoot == null) return false
-        if (root.`val` == subRoot.`val`) {
-            val sameLeft = isSame(root.left, subRoot.left)
-            val sameRight = isSame(root.right, subRoot.right)
-            return sameLeft && sameRight
-        }
-        return false
+
+        return root.`val` == subRoot.`val`
+                && isIdentical(root.left, subRoot.left)
+                && isIdentical(root.right, subRoot.right)
     }
 
     fun isSubtree2(root: TreeNode?, subRoot: TreeNode?): Boolean {
+        if (isIdentical(root, subRoot)) return true
+
+        return isSubtree2(root?.left, subRoot) || isSubtree2(root?.right, subRoot)
+    }
+
+    /**
+     * wrong approach:
+     *
+     * Incorrect approach: Using only inorder traversal is not sufficient to
+     * determine if one tree is a subtree of another. Two different trees can
+     * have the same inorder traversal.
+     *    1          3
+     *     \        /
+     *      2      1
+     *     /        \
+     *    3          2
+     * Ignoring structure: The current implementation only checks if all
+     * values in the subtree exist in the main tree, without considering
+     * their order or structure.
+     * There's a TO DO comment acknowledging that the order needs to be considered.
+     * Inefficiency: This approach creates full lists of all nodes for both trees,
+     * which is unnecessary and inefficient for large trees.
+     * False positives: This method will return true for cases where all values of
+     * the subtree exist in the main tree, even if they're not in the correct structure.
+     */
+    fun isSubtreeInorder(root: TreeNode?, subRoot: TreeNode?): Boolean {
         val rootResult = mutableListOf<Int>()
         inorder(root, rootResult)
         val subRootResult = mutableListOf<Int>()
@@ -67,14 +79,24 @@ fun main() {
     tree.left!!.right = TreeNode(2)
     tree.left!!.right!!.left = TreeNode(0)
 
+    val subtree = TreeNode(4)
+    subtree.left = TreeNode(1)
+    subtree.right = TreeNode(2)
+
+    println(s.isSubtree(tree, subtree))
+    println(s.isSubtree2(tree, subtree))
+
     val tree2 = TreeNode(4)
     tree2.left = TreeNode(1)
     tree2.right = TreeNode(2)
 
-    /*val tree3 = TreeNode(4)
-    tree3.left = TreeNode(1)
-    tree3.right = TreeNode(2)
+    println(s.isSubtree(tree2, subtree))
+    println(s.isSubtree2(tree2, subtree))
 
-    println(s.isSame(tree3, tree2))*/
-    println(s.isSubtree3(tree, tree2))
+    val tree3 = TreeNode(1)
+    tree3.left = TreeNode(1)
+    val subtree2 = TreeNode(1)
+
+    println(s.isSubtree(tree3, subtree2))
+    println(s.isSubtree2(tree3, subtree2))
 }
