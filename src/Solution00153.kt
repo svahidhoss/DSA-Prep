@@ -25,6 +25,31 @@ class Solution00153 {
 
         return nums.first()
     }
+
+    fun findMinOptimized(nums: IntArray): Int {
+        if (nums.size == 1) return nums[0]
+
+        var left = 0
+        var right = nums.lastIndex
+
+        while (left < right) {
+            val mid = left + (right - left) / 2
+
+            // If mid is greater than the next element, next element is the minimum
+            if (mid < nums.lastIndex && nums[mid] > nums[mid + 1]) return nums[mid + 1]
+
+            // If mid is less than the previous element, mid is the minimum
+            if (mid > 0 && nums[mid] < nums[mid - 1]) return nums[mid]
+
+            // If the left half is sorted, minimum is in the right half
+            if (nums[left] <= nums[mid]) left = mid + 1
+            // Otherwise, minimum is in the left half
+            else right = mid - 1
+        }
+
+        // If we've gotten here, the array was not rotated
+        return nums[left]
+    }
 }
 
 fun main() {
