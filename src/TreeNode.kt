@@ -21,6 +21,13 @@ class Node(var `val`: Int) {
     var parent: Node? = null
 }
 
+/**
+ * Definition for a graph node.
+ */
+class GraphNode(var `val`: Int) {
+    var neighbors: ArrayList<GraphNode?> = ArrayList<GraphNode?>()
+}
+
 
 fun isFull(tree: TreeNode?): Boolean {
     if (tree == null) return true
