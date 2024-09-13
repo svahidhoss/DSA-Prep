@@ -1,4 +1,83 @@
+import java.util.ArrayDeque
+import java.util.Queue
+
+private val possibleDirections = arrayOf(Pair(0, 1), Pair(1, 0), Pair(0, -1), Pair(-1, 0))
+
 class Solution00417 {
+
+    /**
+     * BFS solution
+     */
+    fun pacificAtlanticBFS(heights: Array<IntArray>): List<List<Int>> {
+        val m = heights.size
+        val n = heights[0].size
+        if (m == 0 || n == 0) return emptyList()
+
+        val pacificReachable = Array(m) { BooleanArray(n) }
+        val atlanticReachable = Array(m) { BooleanArray(n) }
+
+        // create a queue for pacific elements
+        val pacificQueue: Queue<Pair<Int, Int>> = ArrayDeque()
+        for (i in 0 until m) {
+            pacificQueue.offer(Pair(i, 0))
+            pacificReachable[i][0] = true
+        }
+        for (i in 0 until n) {
+            pacificQueue.offer(Pair(0, i))
+            pacificReachable[0][i] = true
+        }
+
+        bfs(pacificQueue, pacificReachable, heights)
+
+        // create a queue for atlantic ocean elements
+        val atlanticQueue: Queue<Pair<Int, Int>> = ArrayDeque()
+        for (i in 0 until m) {
+            atlanticQueue.offer(Pair(i, n - 1))
+            atlanticReachable[i][n - 1] = true
+        }
+        for (i in 0 until n) {
+            atlanticQueue.offer(Pair(m - 1, i))
+            atlanticReachable[m - 1][i] = true
+        }
+
+        bfs(atlanticQueue, atlanticReachable, heights)
+
+        // preparing the answers
+        val answers = mutableListOf<List<Int>>()
+        for (r in 0 until m) {
+            for (c in 0 until n) {
+                if (pacificReachable[r][c] && atlanticReachable[r][c]) answers.add(listOf(r, c))
+            }
+        }
+
+        return answers
+    }
+
+    private fun bfs(
+        queue: Queue<Pair<Int, Int>>,
+        reachable: Array<BooleanArray>,
+        heights: Array<IntArray>
+    ) {
+        while (queue.isNotEmpty()) {
+            val element = queue.poll()
+            if (!reachable[element.first][element.second]) {
+                // mark as reachable
+                reachable[element.first][element.second] = true
+                for (direction in possibleDirections) {
+                    val newR = element.first + direction.first
+                    val newC = element.second + direction.second
+                    // if within bounds, not visited yet and if height is acceptable
+                    if (newR in heights.indices && newC in heights[0].indices
+                        && !reachable[newR][newC]
+                        && heights[newR][newC] >= heights[element.first][element.second]
+                    ) {
+                        // Do a BFS for new directions
+                        queue.offer(Pair(newR, newC))
+                    }
+                }
+            }
+        }
+    }
 
     fun pacificAtlantic(heights: Array<IntArray>): List<List<Int>> {
         if (heights.isEmpty() || heights[0].isEmpty()) return emptyList()
@@ -27,20 +106,20 @@ class Solution00417 {
         return answers
     }
 
-    private val directions = arrayOf(Pair(0, 1), Pair(1, 0), Pair(0, -1), Pair(-1, 0))
-
     private fun dfs(heights: Array<IntArray>, reachable: Array<BooleanArray>, r: Int, c: Int) {
         reachable[r][c] = true
 
-        for (dir in directions) {
+        for (dir in possibleDirections) {
             val newR = r + dir.first
             val newC = c + dir.second
-            if (newR in heights.indices && newC in heights[0].indices && heights[newR][newC] >= heights[r][c]) {
-                // if not already marked as reachable, explore it
-                if (!reachable[newR][newC]) {
-                    // explore its adjacent nodes
-                    dfs(heights, reachable, newR, newC)
-                }
+            // check if the new node is eligible for exploration
+            if (newR in heights.indices
+                && newC in heights[0].indices
+                && !reachable[newR][newC]
+                && heights[newR][newC] >= heights[r][c]
+            ) {
+                // explore its adjacent nodes
+                dfs(heights, reachable, newR, newC)
             }
         }
     }
