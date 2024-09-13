@@ -3,6 +3,8 @@ import java.util.Queue
 
 private val possibleDirections = arrayOf(Pair(0, 1), Pair(1, 0), Pair(0, -1), Pair(-1, 0))
 
+data class Coordinate(val row: Int, val col: Int)
+
 class Solution00417 {
 
     /**
@@ -16,30 +18,28 @@ class Solution00417 {
         val pacificReachable = Array(m) { BooleanArray(n) }
         val atlanticReachable = Array(m) { BooleanArray(n) }
 
-        // create a queue for pacific elements
-        val pacificQueue: Queue<Pair<Int, Int>> = ArrayDeque()
+        // create a queue for pacific ocean elements
+        val pacificQueue: Queue<Coordinate> = ArrayDeque()
         for (i in 0 until m) {
-            pacificQueue.offer(Pair(i, 0))
+            pacificQueue.offer(Coordinate(i, 0))
             pacificReachable[i][0] = true
         }
         for (i in 0 until n) {
-            pacificQueue.offer(Pair(0, i))
+            pacificQueue.offer(Coordinate(0, i))
             pacificReachable[0][i] = true
         }
-
         bfs(pacificQueue, pacificReachable, heights)
 
         // create a queue for atlantic ocean elements
-        val atlanticQueue: Queue<Pair<Int, Int>> = ArrayDeque()
+        val atlanticQueue: Queue<Coordinate> = ArrayDeque()
         for (i in 0 until m) {
-            atlanticQueue.offer(Pair(i, n - 1))
+            atlanticQueue.offer(Coordinate(i, n - 1))
             atlanticReachable[i][n - 1] = true
         }
         for (i in 0 until n) {
-            atlanticQueue.offer(Pair(m - 1, i))
+            atlanticQueue.offer(Coordinate(m - 1, i))
             atlanticReachable[m - 1][i] = true
         }
-
         bfs(atlanticQueue, atlanticReachable, heights)
 
         // preparing the answers
@@ -54,26 +54,23 @@ class Solution00417 {
     }
 
     private fun bfs(
-        queue: Queue<Pair<Int, Int>>,
+        queue: Queue<Coordinate>,
         reachable: Array<BooleanArray>,
         heights: Array<IntArray>
     ) {
         while (queue.isNotEmpty()) {
-            val element = queue.poll()
-            if (!reachable[element.first][element.second]) {
-                // mark as reachable
-                reachable[element.first][element.second] = true
-                for (direction in possibleDirections) {
-                    val newR = element.first + direction.first
-                    val newC = element.second + direction.second
-                    // if within bounds, not visited yet and if height is acceptable
-                    if (newR in heights.indices && newC in heights[0].indices
-                        && !reachable[newR][newC]
-                        && heights[newR][newC] >= heights[element.first][element.second]
-                    ) {
-                        // Do a BFS for new directions
-                        queue.offer(Pair(newR, newC))
-                    }
+            val (row, col) = queue.poll()
+            for ((dirRow, dirCol) in possibleDirections) {
+                val newR = row + dirRow
+                val newC = col + dirCol
+                // if within bounds, not visited yet and if height is acceptable
+                if (newR in heights.indices && newC in heights[0].indices
+                    && !reachable[newR][newC]
+                    && heights[newR][newC] >= heights[row][col]
+                ) {
+                    reachable[newR][newC] = true
+                    // Do a BFS for new directions
+                    queue.offer(Coordinate(newR, newC))
                 }
             }
         }
