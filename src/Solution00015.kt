@@ -10,31 +10,28 @@
  */
 class Solution00015 {
     fun threeSum(nums: IntArray): List<List<Int>> {
-        val result = mutableListOf<MutableList<Int>>()
-        nums.sort()
+        val result = mutableSetOf<List<Int>>()
+
+        // Add all the values to the map
+        val map = mutableMapOf<Int, Int>()
+        nums.forEachIndexed { i, num ->
+            map[num] = i
+        }
+
+        // Outer loop to iterate over the first element
         for (i in nums.indices) {
-            // break the loop and finish once you reach values greater than 0
-            // as the sum would not add up to 0
-            if (nums[i] > 0) return result
-            // skip if value is equal to previous one
-            if (i > 0 && nums[i] == nums[i-1]) continue
-
-            twoSum(nums, i, result)
-        }
-        return result
-    }
-
-    private fun twoSum(nums: IntArray, i: Int, result: MutableList<MutableList<Int>>) {
-        val seen = mutableSetOf<Int>()
-        // start from index+1
-        for (j in i + 1 until nums.size) {
-            // The value we're looking for
-            val target = -nums[i] - nums[j]
-            if (seen.contains(target)) {
-                result.add(mutableListOf(nums[i], target, nums[j]))
+            // Inner loop to iterate over the second element
+            for (j in i + 1..nums.lastIndex) {
+                // since the sum of all these values must be 0
+                // The target third value we're looking for
+                val target = -nums[i] - nums[j]
+                map[target]?.let {
+                    if (i != it && j != it) result.add(listOf(target, nums[i], nums[j]).sorted())
+                }
             }
-            seen.add(nums[j])
         }
+
+        return result.toList()
     }
 
     fun twoSumOrdered(numbers: IntArray, target: Int): IntArray {
@@ -57,17 +54,12 @@ class Solution00015 {
 fun main() {
     val sol = Solution00015()
     var nums = intArrayOf(-1, 0, 1, 2, -1, -4)
-//    nums.sort()
-//    println(Arrays.toString(nums))
-//    println(Arrays.toString(nums.sliceArray(1 until nums.size)))
-//    println(Arrays.toString(nums))
-//    println(nums.slice(1 until nums.size))
-//    println(Arrays.toString(nums))
+
     println(sol.threeSum(nums))
     nums = intArrayOf(0, 1, 1)
     println(sol.threeSum(nums))
     nums = intArrayOf(0, 0, 0)
     println(sol.threeSum(nums))
-    nums = intArrayOf(0,0, 0, 0)
+    nums = intArrayOf(0, 0, 0, 0)
     println(sol.threeSum(nums))
 }
