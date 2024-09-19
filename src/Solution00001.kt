@@ -8,13 +8,12 @@ class Solution00001 {
         val map = mutableMapOf<Int, Int>()
         nums.forEachIndexed { i, num ->
             map[target - num]?.let {
-                // Doing this help with cases where you have two similar keys with different indexes
-                if (i != it) return intArrayOf(i, it).sortedArray()
+                return intArrayOf(i, it)
             }
             map[num] = i
         }
 
-        throw IllegalStateException("One valid answer did not exist!")
+        throw IllegalStateException("No valid answer was found!")
     }
 
     fun twoSum3(nums: IntArray, target: Int): IntArray {
@@ -29,7 +28,7 @@ class Solution00001 {
             }
         }
 
-        throw IllegalStateException("One valid answer was not found..")
+        throw IllegalStateException("ONo valid answer was found..")
     }
 
     fun twoSum2(nums: IntArray, target: Int): IntArray {
