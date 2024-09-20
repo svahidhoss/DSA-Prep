@@ -2,6 +2,10 @@ import java.lang.IllegalStateException
 import java.util.*
 
 class Solutions00167 {
+
+    /**
+     * Uses a two pointer approach.
+     */
     fun twoSum(numbers: IntArray, target: Int): IntArray {
         var p = 0
         var q = numbers.size - 1
@@ -15,7 +19,7 @@ class Solutions00167 {
             }
         }
 
-        throw IllegalStateException("One valid answer did not exist!")
+        throw IllegalStateException("No valid answer was found!")
     }
 
     fun twoSum2(numbers: IntArray, target: Int): IntArray {
@@ -25,7 +29,7 @@ class Solutions00167 {
             if (i2 > 0) return intArrayOf(i + 1, i2 + 1)
         }
 
-        throw IllegalStateException("One valid answer did not exist!")
+        throw IllegalStateException("No valid answer was found!")
     }
 }
 
