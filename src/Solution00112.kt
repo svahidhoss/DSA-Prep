@@ -1,3 +1,6 @@
+import java.util.ArrayDeque
+import java.util.Queue
+
 /**
  * Example:
  * var ti = TreeNode(5)
@@ -26,6 +29,38 @@ class Solution00112 {
         return hasPathSum(root.left, targetSum - root.`val`)
                 || hasPathSum(root.right, targetSum - root.`val`)
     }
+
+    fun hasPathSumBFS(root: TreeNode?, targetSum: Int): Boolean {
+        root ?: return false
+        // do a BFS approach
+        val queue: Queue<TreeNode> = ArrayDeque()
+        root.`val` -= targetSum
+        queue.add(root)
+        while (queue.isNotEmpty()) {
+            val curr = queue.remove()
+            when {
+                curr.`val` == 0 -> {
+                    if (curr.left == null && curr.right == null) return true
+                }
+
+                curr.`val` < 0 -> {
+                    curr.left?.let {
+                        it.`val` += curr.`val`
+                        queue.add(it)
+                    }
+                    curr.right?.let {
+                        it.`val` += curr.`val`
+                        queue.add(it)
+                    }
+                }
+                // it's impossible to find a path that will reach target sum
+                else -> continue
+            }
+
+        }
+
+        return false
+    }
 }
 
 fun main() {
@@ -43,18 +78,29 @@ fun main() {
     root1.right?.right = TreeNode(4)
     root1.right?.right?.right = TreeNode(1)
     println(solution.hasPathSum(root1, 22)) // Expected output: true
+    println(solution.hasPathSumBFS(root1, 22)) // Expected output: true
 
     val root2 = TreeNode(1)
     root2.left = TreeNode(2)
     root2.right = TreeNode(3)
     println(solution.hasPathSum(root2, 5)) // Expected output: false
+    println(solution.hasPathSumBFS(root2, 5)) // Expected output: false
 
     // Test Case 3: Single Node Tree
     val root3 = TreeNode(1)
-    println(solution.hasPathSum(root3, 0)) // Expected output: true
+    println(solution.hasPathSum(root3, 0)) // Expected output: false
+    println(solution.hasPathSumBFS(root3, 0)) // Expected output: false
     println(solution.hasPathSum(root3, 1)) // Expected output: true
+    println(solution.hasPathSumBFS(root3, 1)) // Expected output: true
 
     // Test Case 4: Empty Tree
     val root4: TreeNode? = null
-    println(solution.hasPathSum(root4, 0)) // Expected output: true
+    println(solution.hasPathSum(root4, 0)) // Expected output: false
+    println(solution.hasPathSumBFS(root4, 0)) // Expected output: false
+
+    // Test Case 5: Tree with empty values
+    val root5 = TreeNode(-2)
+    root5.right = TreeNode(-3)
+    println(solution.hasPathSum(root5, -5)) // Expected output: true
+    println(solution.hasPathSumBFS(root5, -5)) // Expected output: true
 }
