@@ -20,6 +20,7 @@ class Solution00023 {
 
         // create a min heap based on the int value of list node
         val minHeap = PriorityQueue<ListNode>(compareBy { it.`val` })
+        // val minHeap = PriorityQueue<ListNode> { a, b -> a.`val` - b.`val` }
         // Add the head of each non-null list to the heap
         lists.filterNotNull().forEach {
             minHeap.offer(it)

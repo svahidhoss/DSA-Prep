@@ -1,4 +1,4 @@
-class Solution0141 {
+class Solution00141 {
     fun hasCycle(head: ListNode?): Boolean {
         val visitedNodeSet = mutableSetOf<ListNode>()
         var h = head
@@ -49,7 +49,7 @@ fun main() {
     val secondNode = sample?.next
     sample?.next?.next?.next?.next = secondNode
 
-    val sol = Solution0141()
+    val sol = Solution00141()
     val result = sol.detectCycle(sample)
     print(result?.`val`)
 }
