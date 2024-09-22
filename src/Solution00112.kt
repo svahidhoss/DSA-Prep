@@ -38,25 +38,18 @@ class Solution00112 {
         queue.add(root)
         while (queue.isNotEmpty()) {
             val curr = queue.remove()
-            when {
-                curr.`val` == 0 -> {
-                    if (curr.left == null && curr.right == null) return true
+            if (curr.`val` == 0) {
+                if (curr.left == null && curr.right == null) return true
+            } else {
+                curr.left?.let {
+                    it.`val` += curr.`val`
+                    queue.add(it)
                 }
-
-                curr.`val` < 0 -> {
-                    curr.left?.let {
-                        it.`val` += curr.`val`
-                        queue.add(it)
-                    }
-                    curr.right?.let {
-                        it.`val` += curr.`val`
-                        queue.add(it)
-                    }
+                curr.right?.let {
+                    it.`val` += curr.`val`
+                    queue.add(it)
                 }
-                // it's impossible to find a path that will reach target sum
-                else -> continue
             }
-
         }
 
         return false
@@ -98,9 +91,23 @@ fun main() {
     println(solution.hasPathSum(root4, 0)) // Expected output: false
     println(solution.hasPathSumBFS(root4, 0)) // Expected output: false
 
-    // Test Case 5: Tree with empty values
+    // Test Case 5: Tree with negative values
     val root5 = TreeNode(-2)
     root5.right = TreeNode(-3)
     println(solution.hasPathSum(root5, -5)) // Expected output: true
     println(solution.hasPathSumBFS(root5, -5)) // Expected output: true
+
+    // Test Case 6: Tree with negative values where no need to stop when reaching 0
+    val root6 = TreeNode(1)
+    root6.left = TreeNode(-2)
+    root6.right = TreeNode(-3)
+
+    root6.left?.left = TreeNode(1)
+    root6.left?.right = TreeNode(3)
+
+    root6.right?.left = TreeNode(-2)
+
+    root6.left?.left?.left = TreeNode(-1)
+    println(solution.hasPathSum(root6, -1)) // Expected output: true
+    println(solution.hasPathSumBFS(root6, -1)) // Expected output: true
 }
