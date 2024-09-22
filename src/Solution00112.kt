@@ -30,7 +30,25 @@ class Solution00112 {
                 || hasPathSum(root.right, targetSum - root.`val`)
     }
 
-    fun hasPathSumBFS(root: TreeNode?, targetSum: Int): Boolean {
+    /**
+     * The algorithm will find a path sum if it exists.
+     * Approach:
+     * Uses BFS with a queue to traverse the tree.
+     * Subtracts the target sum from the root and propagates the difference
+     * down the tree. It modifies the input tree, which is generally not recommended.
+     *
+     * Time Complexity:
+     * O(n), where n is the number of nodes in the tree. Each node is visited once.
+     * Space Complexity:
+     * O(w), where w is the maximum width of the tree. In the worst case,
+     * this could be O(n) for a complete binary tree.
+     *
+     * Potential Improvements and Observations:
+     * a. Modifying the values in the tree nodes, can lead to unexpected behavior
+     * if the tree is used elsewhere after this function call.
+     * b. Leaf node check is correctly placed inside the val == 0 condition.
+     */
+    fun hasPathSumBFSWithModification(root: TreeNode?, targetSum: Int): Boolean {
         root ?: return false
         // do a BFS approach
         val queue: Queue<TreeNode> = ArrayDeque()
@@ -39,6 +57,7 @@ class Solution00112 {
         while (queue.isNotEmpty()) {
             val curr = queue.remove()
             if (curr.`val` == 0) {
+                // leaf node check
                 if (curr.left == null && curr.right == null) return true
             } else {
                 curr.left?.let {
@@ -49,6 +68,35 @@ class Solution00112 {
                     it.`val` += curr.`val`
                     queue.add(it)
                 }
+            }
+        }
+
+        return false
+    }
+
+    /**
+     * This BFS algorithm, doesn't modify the input tree.
+     * Uses a Pair to store both the node and the remaining sum in the queue.
+     * Simplifies the overall structure of the loop.
+     * Maintains the same time and space complexity.
+     */
+    fun hasPathSumBFS(root: TreeNode?, targetSum: Int): Boolean {
+        root ?: return false
+        // do a BFS approach
+        val queue: Queue<Pair<TreeNode, Int>> = ArrayDeque()
+        queue.add(root to targetSum)
+        while (queue.isNotEmpty()) {
+            val (curr, remainingSum) = queue.remove()
+            val newSum = remainingSum - curr.`val`
+            if (newSum == 0) {
+                // leaf node check
+                if (curr.left == null && curr.right == null) return true
+            }
+            curr.left?.let {
+                queue.add(it to newSum)
+            }
+            curr.right?.let {
+                queue.add(it to newSum)
             }
         }
 
@@ -71,7 +119,7 @@ fun main() {
     root1.right?.right = TreeNode(4)
     root1.right?.right?.right = TreeNode(1)
     println(solution.hasPathSum(root1, 22)) // Expected output: true
-    println(solution.hasPathSumBFS(root1, 22)) // Expected output: true
+    println(solution.hasPathSumBFSWithModification(root1, 22)) // Expected output: true
 
     val root2 = TreeNode(1)
     root2.left = TreeNode(2)
