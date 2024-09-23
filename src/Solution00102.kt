@@ -65,14 +65,14 @@ class Solution00102 {
 
     data class NodeWithDepth(val node: TreeNode, val depth: Int)
 
-    fun levelOrderDFS(root: TreeNode?): List<List<Int>>? {
+    fun levelOrderDFS(root: TreeNode?): List<List<Int>> {
         val result = mutableListOf<MutableList<Int>>()
         root?.let { levelHelper(result, it, 0) }
         return result
     }
 
     private fun levelHelper(result: MutableList<MutableList<Int>>, node: TreeNode, d: Int) {
-        while (result.size < d + 1) result.add(mutableListOf())
+        while (result.size - 1 < d) result.add(mutableListOf())
         result[d].add(node.`val`)
 
         node.left?.let { levelHelper(result, it, d + 1) }
@@ -90,6 +90,7 @@ fun main() {
 
     println(s.levelOrder(t))
     println(s.levelOrderBFS(t))
+    println(s.levelOrderDFS(t))
 
     t = TreeNode(3)
     t.left = TreeNode(9)
@@ -99,4 +100,5 @@ fun main() {
 
     println(s.levelOrder(t))
     println(s.levelOrderBFS(t))
+    println(s.levelOrderDFS(t))
 }
