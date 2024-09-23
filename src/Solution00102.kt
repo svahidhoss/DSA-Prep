@@ -2,7 +2,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class Solution0102 {
+class Solution00102 {
     fun levelOrderBFS(root: TreeNode?): List<List<Int>> {
         val result = ArrayList<ArrayList<Int>>()
         val queue = ArrayDeque<NodeWithDepth>()
@@ -81,7 +81,7 @@ class Solution0102 {
 }
 
 fun main() {
-    val s = Solution0102()
+    val s = Solution00102()
     var t = TreeNode(1)
     t.left = TreeNode(2)
     t.right = TreeNode(3)
