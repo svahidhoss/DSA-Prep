@@ -1,3 +1,5 @@
+import java.util.Stack
+import java.util.ArrayDeque
 import kotlin.math.*
 
 /**
@@ -15,6 +17,9 @@ class Solution00110 {
         return getHeightAndBalance(root) != -1
     }
 
+    /**
+     * -1 means the node is unbalanced.
+     */
     private fun getHeightAndBalance(root: TreeNode?): Int {
         if (root == null) return 0
         val left = getHeightAndBalance(root.left)
