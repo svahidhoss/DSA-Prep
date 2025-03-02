@@ -14,6 +14,7 @@ import static java_solutions.ListNode.printList;
  */
 public class Solution00021 {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        // Create the node that will hold the final list's head
         var head = new ListNode(0);
         var node = head;
 

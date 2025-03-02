@@ -1,3 +1,5 @@
+package java_solutions;
+
 public class Solution6201 {
     public int[] findArray(int[] pref) {
         int[] result = new int[pref.length];

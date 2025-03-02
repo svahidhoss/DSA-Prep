@@ -1,3 +1,5 @@
+package java_solutions;
+
 class Solution1662 {
     public boolean arrayStringsAreEqual(String[] word1, String[] word2) {
         int w1 = 0;
