@@ -11,17 +11,17 @@ package java_solutions;
  */
 public class Solution00235 {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        // if found either p or q that could be our solution
+        // Base case: if root is null or matches either p or q return it
         if (root == null || root == p || root == q) return root;
-
+        // Search in left and right subtrees
         var left = lowestCommonAncestor(root.left, p, q);
         var right = lowestCommonAncestor(root.right, p, q);
-        if ((left == p && right == q) || (left == q && right == p)) return root;
 
-        if (left != null && right == null) return left;
-        if (right != null && left == null) return right;
+        // If both left and right are non-null, we found p and q in different subtrees
+        if (left != null && right != null) return root;
 
-        return null;
+        // If one subtree returned null, return the non-null result
+        return left != null ? left : right;
     }
 
     public static void main(String[] args) {
