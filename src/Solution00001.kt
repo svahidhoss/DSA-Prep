@@ -28,7 +28,7 @@ class Solution00001 {
             }
         }
 
-        throw IllegalStateException("ONo valid answer was found..")
+        throw IllegalStateException("No valid answer was found..")
     }
 
     fun twoSum2(nums: IntArray, target: Int): IntArray {

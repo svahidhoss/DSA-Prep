@@ -21,10 +21,9 @@ import java.util.*
  *
  *   5
  *   4
- *   [2]
- *   -> 1
+ *  [2] add -> 1
  * 	[2,1]
- * 	->
+ * 	add 1 ->[1]
  * Input: pool = [1,2,3,6,7,7]
  * Output: 0
  *
