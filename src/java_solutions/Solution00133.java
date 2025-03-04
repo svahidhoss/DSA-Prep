@@ -2,9 +2,27 @@ package java_solutions;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 public class Solution00133 {
+    // Use this to find nodes that are already cloned
+    Map<Integer, Node> map = new HashMap<>();
+
+    public Node cloneGraphDFS(Node node) {
+        if (node == null) return null;
+        if(map.containsKey(node.val)) return map.get(node.val);
+
+        Node cloned = new Node(node.val);
+        map.put(node.val, cloned);
+
+        for(Node neighbor: node.neighbors) {
+            cloned.neighbors.add(cloneGraphDFS(neighbor));
+        }
+
+        return cloned;
+    }
+
     public Node cloneGraph(Node node) {
         if (node == null) return null;
 
