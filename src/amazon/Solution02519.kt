@@ -18,7 +18,7 @@ class Solution02519 {
             while (deque.isNotEmpty() && nums[deque.last] <= nums[i]) {
                 deque.removeLast()
             }
-            deque.addLast(i)
+            deque.add(i)
         }
 
         for (i in k until nums.size) {
