@@ -10,7 +10,7 @@ public class Solution00075 {
      *
      * @param nums input array with 3 colors
      */
-    public void sortColors(int[] nums) {
+    public void sortColors2(int[] nums) {
         var redList = new ArrayList<Integer>();
         var whiteList = new ArrayList<Integer>();
         var blueList = new ArrayList<Integer>();
@@ -25,6 +25,35 @@ public class Solution00075 {
         for (int i : redList) nums[counter++] = 0;
         for (int i : whiteList) nums[counter++] = 1;
         for (int i : blueList) nums[counter++] = 2;
+    }
+
+    /**
+     * O(n) time and O(1) space complexity
+     *
+     * @param nums input array with 3 colors
+     */
+    public void sortColors(int[] nums) {
+        if (nums.length < 2) return;
+
+        int i = 0;
+        int red = 0;
+        int blue = nums.length - 1;
+        while (i <= blue) {
+            if (nums[i] == 0) {
+                swap(nums, i++, red++);
+            } else if (nums[i] == 2) {
+                // value at i will need to be checked after this
+                swap(nums, i, blue--);
+            } else {
+                i++;
+            }
+        }
+    }
+
+    static void swap(int[] arr, int p, int q) {
+        var temp = arr[p];
+        arr[p] = arr[q];
+        arr[q] = temp;
     }
 
     public static void main(String[] args) {
@@ -66,6 +95,4 @@ public class Solution00075 {
         System.out.println("Test 6: " + Arrays.toString(nums6));
         System.out.println("Expected: []");
     }
-
-
 }
