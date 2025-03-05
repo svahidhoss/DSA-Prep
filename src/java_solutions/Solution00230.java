@@ -28,6 +28,38 @@ public class Solution00230 {
      * @return The kth smallest value in BST
      */
     public int kthSmallest(TreeNode root, int k) {
+        var counter = new int[]{0};
+        return kthSmallestHelper(root, k, counter);
+    }
+
+    /**
+     * DFS in order traversal:
+     */
+    public int kthSmallestHelper(TreeNode root, int k, int[] counter) {
+        // if null, skip the node
+        if (root == null) return -1;
+
+        // left
+        int leftResult = kthSmallestHelper(root.left, k, counter);
+        if (leftResult != -1) return leftResult;
+
+        // node
+        counter[0]++;
+        if (counter[0] >= k) return root.val;
+
+        // right
+        return kthSmallestHelper(root.right, k, counter);
+    }
+
+
+    /**
+     * we know that: 1 <= k <= n <= 104
+     *
+     * @param root The root
+     * @param k    the index of the smallest value
+     * @return The kth smallest value in BST
+     */
+    public int kthSmallest2(TreeNode root, int k) {
         List<Integer> values = new ArrayList<>();
         kthSmallestHelper(root, k, values);
 
