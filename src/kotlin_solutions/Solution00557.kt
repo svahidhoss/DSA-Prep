@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution00557 {
     fun reverseWords2(s: String): String {
         val words = s.split(" ")

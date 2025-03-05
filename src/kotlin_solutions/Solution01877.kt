@@ -1,4 +1,4 @@
-
+package kotlin_solutions
 class Solution01877 {
     fun minPairSum(nums: IntArray): Int {
         val sortedNumsList = nums.sorted()

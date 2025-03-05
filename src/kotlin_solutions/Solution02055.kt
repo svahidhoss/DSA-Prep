@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 import java.util.*
 
 class Solution02055 {

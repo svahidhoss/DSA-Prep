@@ -1,3 +1,9 @@
+package kotlin_solutions
+
+import BinarySearchFirstTrue
+import chi
+import torsq
+
 class Solution02962 {
     fun countSubarrays(nums: IntArray, k: Int): Long {
         val max = nums.max()

@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 import kotlin.math.max
 
 class Solution00673 {

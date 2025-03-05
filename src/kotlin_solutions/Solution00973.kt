@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 import java.util.PriorityQueue
 import kotlin.math.pow
 import kotlin.math.sqrt

@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 import java.util.*
 import kotlin.collections.ArrayDeque
 

@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 import java.lang.IllegalStateException
 import java.util.*
 import kotlin.math.min

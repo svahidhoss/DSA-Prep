@@ -1,3 +1,7 @@
+package kotlin_solutions
+
+import ListNode
+
 class Solution00876 {
     fun middleNode(head: ListNode?): ListNode? {
         if (head?.next == null) return head

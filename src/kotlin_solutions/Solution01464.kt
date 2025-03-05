@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution01464 {
     fun maxProduct(nums: IntArray): Int {
         for (i in 0 until nums.size - 1) {

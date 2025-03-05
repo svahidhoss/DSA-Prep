@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution01150 {
     fun isMajorityElement2(nums: IntArray, target: Int): Boolean {
         var count = 0

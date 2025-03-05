@@ -1,7 +1,6 @@
-import java.io.File
-import java.util.*
+package kotlin_solutions
+
 import kotlin.collections.HashSet
-import kotlin.math.max
 
 class Solution02357 {
     fun minimumOperations(nums: IntArray): Int {

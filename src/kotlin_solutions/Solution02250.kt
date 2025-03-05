@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution2250 {
     fun countRectangles(
         rectangles: Array<IntArray>,

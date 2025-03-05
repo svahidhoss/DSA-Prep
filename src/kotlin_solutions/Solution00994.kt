@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution00994 {
     fun orangesRotting(grid: Array<IntArray>): Int {
         // Find all the rotten and fresh oranges

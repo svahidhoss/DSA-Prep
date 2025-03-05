@@ -1,3 +1,7 @@
+package kotlin_solutions
+
+import TreeNode
+
 class Solution00700 {
     fun searchBST(root: TreeNode?, `val`: Int): TreeNode? {
         if (root == null || root.`val` == `val`) return root

@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution00560 {
     fun subarraySum(nums: IntArray, k: Int): Int {
         if (nums.size == 1 && nums[0] == k) return 1

@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution00665 {
 
     fun checkPossibility(nums: IntArray): Boolean {

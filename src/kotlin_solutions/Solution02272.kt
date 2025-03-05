@@ -1,4 +1,4 @@
-import java.util.*
+package kotlin_solutions
 
 class Solution02272 {
     fun largestVariance(s: String): Int {

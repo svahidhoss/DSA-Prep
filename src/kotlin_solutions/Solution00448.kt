@@ -1,3 +1,5 @@
+package kotlin_solutions
+
 class Solution0448 {
     fun findDisappearedNumbers(nums: IntArray): List<Int> {
         nums.forEachIndexed { index, _ ->
