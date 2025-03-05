@@ -22,6 +22,26 @@ public class Solution00141 {
         return p == q;
     }
 
+    /**
+     * This modifies the original list structure by changing
+     * node values. This could be problematic if the list needs
+     * to be preserved in its original state.
+     *
+     * @param head beg of the linked list
+     * @return if the linked list has a cycle in it
+     */
+    public boolean hasCycle2(ListNode head) {
+        if (head == null || head.next == null) return false;
+
+        // -10^5 <= Node.val <= 10^5
+        while (head != null && head.val != Integer.MIN_VALUE) {
+            head.val = Integer.MIN_VALUE;
+            head = head.next;
+        }
+
+        return head != null;
+    }
+
     public static void main(String[] args) {
         var solution = new Solution00141();
 
