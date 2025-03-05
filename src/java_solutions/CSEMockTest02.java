@@ -26,8 +26,6 @@ public class CSEMockTest02 {
         System.out.println(input);
 
         // Alternative:
-        beg = 0;
-        end = input.length() - 1;
         stringBuilder = new StringBuilder(input);
         stringBuilder.reverse();
         input = stringBuilder.toString();
@@ -92,16 +90,45 @@ public class CSEMockTest02 {
         System.out.println(instance1 == instance2);
     }
 
+    /**
+     * Implement a simple in-memory key-value database with
+     * transaction support. The program should handle the following commands:
+     * <p>
+     * SET key value - Set the value of a key
+     * GET key - Get the value of a key
+     * DELETE key - Delete a key
+     * BEGIN - Start a transaction
+     * COMMIT - Commit the current transaction
+     * ROLLBACK - Rollback the current transaction
+     */
+    private void challenge5() {
+        Scanner scanner = new Scanner(System.in);
+        Database db = new Database();
+
+        while (scanner.hasNext()) {
+            String command = scanner.next();
+
+            // Your code here to handle commands
+            // (Implement your Database class)
+
+        }
+
+        scanner.close();
+    }
+
     public static void main(String[] args) {
         var mockTest = new CSEMockTest02();
 
         int x = 10;
         System.out.println(x++ + ++x);
         System.out.println("5" + 2 + 3);
+        String s1 = "Hello";
+        String s2 = s1.intern();
+        System.out.println(s2.intern());
 
-//        mockTest.challenge1();
-//        mockTest.challenge2();
-//        mockTest.challenge3();
+        mockTest.challenge1();
+        mockTest.challenge2();
+        mockTest.challenge3();
         mockTest.challenge4();
     }
 }
