@@ -1,7 +1,23 @@
 package java_solutions;
 
 public class Solution00125 {
-    private boolean isPalindrome(String s) {
+    public boolean isPalindrome(String s) {
+        // Two pointer approach:
+        var beg = 0;
+        var end = s.length() - 1;
+
+        while (beg < end) {
+            while (beg < end && !Character.isLetterOrDigit(s.charAt(beg))) beg++;
+            while (beg < end && !Character.isLetterOrDigit(s.charAt(end))) end--;
+            if (Character.toLowerCase(s.charAt(beg)) != Character.toLowerCase(s.charAt(end))) return false;
+            beg++;
+            end--;
+        }
+
+        return true;
+    }
+
+    public boolean isPalindrome2(String s) {
         // 1. prepare the s
         var sb = new StringBuilder(s.toLowerCase().replaceAll("[^a-zA-Z0-9]", ""));
         return (sb.toString().contentEquals(sb.reverse()));
@@ -12,6 +28,7 @@ public class Solution00125 {
 
         TestCase[] testCases = {
                 new TestCase("racecar", true),
+                new TestCase("race a car", false),
                 new TestCase("A man, a plan, a canal, Panama", true),
                 new TestCase("hello", false),
                 new TestCase("Madam, I'm Adam", true),
