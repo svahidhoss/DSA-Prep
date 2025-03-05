@@ -1,4 +1,5 @@
-import java.io.*;
+package java_solutions;
+
 import java.util.*;
 
 public class Solution {
