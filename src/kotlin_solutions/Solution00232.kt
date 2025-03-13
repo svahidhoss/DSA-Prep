@@ -1,6 +1,7 @@
 import java.util.*
+import kotlin.collections.ArrayDeque
 
-class MyQueue {
+class MyQueue2 {
     /**
      * Holds the incoming values in a regular
      * way they should be in a stack.
@@ -40,6 +41,44 @@ class MyQueue {
     }
 }
 
+class MyQueue<T> {
+    /**
+     * Holds values as they are inserted.
+     */
+    private val stack1 = ArrayDeque<T>()
+
+    /**
+     * This will hold the t values in the reverse
+     * order of their insertions.
+     */
+    private val stack2 = ArrayDeque<T>()
+
+    fun push(t: T) {
+        stack1.add(t)
+    }
+
+    fun pop(): T {
+        if (stack2.isEmpty()) {
+            while (stack1.isNotEmpty()) stack2.addLast(stack1.removeLast())
+        }
+
+        return stack2.removeLast()
+    }
+
+    fun peek(): T {
+        if (stack2.isEmpty()) {
+            while (stack1.isNotEmpty()) stack2.addLast(stack1.removeLast())
+        }
+
+        return stack2.last()
+    }
+
+    fun empty(): Boolean {
+        return stack1.isEmpty() && stack2.isEmpty()
+    }
+
+}
+
 /**
  * Your MyQueue object will be instantiated and called as such:
  * var obj = MyQueue()
@@ -50,7 +89,7 @@ class MyQueue {
  */
 fun main() {
     // Create an instance of MyQueue
-    val myQueue = MyQueue()
+    val myQueue = MyQueue<Int>()
 
     // Test Case 1: Push elements and Peek
     myQueue.push(1) // Queue: [1]
