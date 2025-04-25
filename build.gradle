@@ -1,11 +1,10 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.9.20'
-    // Matches KotlinJavaRuntime in IML; adjust if you need a different version
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group = 'com.vahoss'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -16,16 +15,10 @@ sourceSets {
         java {
             srcDirs = ['src/main/java'] // Adjust if your Java files are elsewhere
         }
-        kotlin {
-            srcDirs = ['src/main/kotlin'] // Adjust if your Kotlin files are elsewhere
-        }
     }
     test {
         java {
             srcDirs = ['src/test/java']
-        }
-        kotlin {
-            srcDirs = ['src/test/kotlin']
         }
     }
 }
