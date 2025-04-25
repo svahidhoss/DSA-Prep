@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+    // Matches KotlinJavaRuntime in IML; adjust if you need a different version
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java'] // Adjust if your Java files are elsewhere
+        }
+        kotlin {
+            srcDirs = ['src/main/kotlin'] // Adjust if your Kotlin files are elsewhere
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        kotlin {
+            srcDirs = ['src/test/kotlin']
+        }
+    }
+}
+
+dependencies {
+    // Kotlin standard library (equivalent to KotlinJavaRuntime in IML)
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.20'
+
+    // JUnit 5 dependencies as per IML (version 5.8.1)
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testImplementation 'org.opentest4j:opentest4j:1.2.0'
+    testImplementation 'org.junit.platform:junit-platform-commons:1.8.1'
+    testImplementation 'org.apiguardian:apiguardian-api:1.1.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.platform:junit-platform-engine:1.8.1'
+
+    // JUnit 4 dependencies as per IML (version 4.13.1)
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'org.hamcrest:hamcrest-core:1.3'
+}
+
+test {
+    useJUnitPlatform()
+}
