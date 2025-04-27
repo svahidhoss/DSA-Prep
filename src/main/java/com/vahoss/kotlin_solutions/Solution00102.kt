@@ -1,72 +1,62 @@
 package com.vahoss.kotlin_solutions
 
 import com.vahoss.TreeNode
-import java.util.*
+import kotlin.collections.ArrayDeque
 import kotlin.collections.ArrayList
 
 
 class Solution00102 {
     fun levelOrderBFS(root: TreeNode?): List<List<Int>> {
-        val result = ArrayList<ArrayList<Int>>()
-        val queue = ArrayDeque<NodeWithDepth>()
+        val result = ArrayList<List<Int>>()
+        val queue = ArrayDeque<TreeNode>()
 
-        var rowList = ArrayList<Int>()
-
-        var currentRow = 0
         root?.let {
-            queue.add(NodeWithDepth(it, currentRow))
+            queue.add(it)
         }
 
         while (queue.isNotEmpty()) {
-            val currentNode = queue.removeFirst()
-            if (currentNode.depth != currentRow) {
-                // Add the last row
-                result.add(rowList)
-                rowList = ArrayList()
-                currentRow++
+            val levelSize = queue.size
+            val currentRow = mutableListOf<Int>()
+            repeat(levelSize) {
+                val current = queue.removeFirst()
+                currentRow.add(current.`val`)
+                current.left?.let { queue.add(it) }
+                current.right?.let { queue.add(it) }
             }
-            // add the current node's value to the list
-            rowList.add(currentNode.node.`val`)
-
-            currentNode.node.left?.let {
-                queue.add(NodeWithDepth(it, currentNode.depth + 1))
-            }
-            currentNode.node.right?.let {
-                queue.add(NodeWithDepth(it, currentNode.depth + 1))
-            }
+            result.add(currentRow.toList())
         }
-        // Add the last row
-        if (rowList.isNotEmpty()) result.add(rowList)
 
         return result
     }
 
     fun levelOrder(root: TreeNode?): List<List<Int>> {
-        val result = mutableListOf<MutableList<Int>>()
-        val queue: Queue<NodeWithDepth> = LinkedList()
+        val result = ArrayList<ArrayList<Int>>()
+        val queue = ArrayDeque<NodeWithDepth>()
+
         root?.let {
             queue.add(NodeWithDepth(it, 0))
-        }
+        } ?: return result
 
-        while (queue.isNotEmpty()) {
-            val nodeWithDepth = queue.poll()
-            val node = nodeWithDepth.node
+        while (!queue.isEmpty()) {
+            val current = queue.removeFirst()
+            // Ensure result has a list for this depth
+            if (result.size <= current.depth) result.add(ArrayList())
 
-            if (result.size != nodeWithDepth.depth + 1) result.add(mutableListOf())
-            result[nodeWithDepth.depth].add(node.`val`)
+            // Add current node's value to its level's list
+            result[current.depth].add(current.treeNode.`val`)
 
-            node.left?.let {
-                queue.add(NodeWithDepth(it, nodeWithDepth.depth + 1))
+            current.treeNode.left?.let {
+                queue.add(NodeWithDepth(it, current.depth + 1))
             }
-            node.right?.let {
-                queue.add(NodeWithDepth(it, nodeWithDepth.depth + 1))
+            current.treeNode.right?.let {
+                queue.add(NodeWithDepth(it, current.depth + 1))
             }
         }
 
         return result
     }
 
-    data class NodeWithDepth(val node: TreeNode, val depth: Int)
+    data class NodeWithDepth(val treeNode: TreeNode, val depth: Int)
 
     fun levelOrderDFS(root: TreeNode?): List<List<Int>> {
         val result = mutableListOf<MutableList<Int>>()
