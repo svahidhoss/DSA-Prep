@@ -16,21 +16,40 @@ fun diameterOfBinaryTree2(root: TreeNode?): Int {
 }
 
 class Solution00543 {
+    fun diameterOfBinaryTree(root: TreeNode?): Int {
+        // Reset to 0 each time you call this function
+        val diameter = intArrayOf(0) // Mutable container
+        recursiveDiameter(root, diameter)
+        return diameter[0]
+    }
+
+    private fun recursiveDiameter(root: TreeNode?, diameter: IntArray): Int {
+        if (root == null) return 0
+
+        val left = recursiveDiameter(root.left, diameter)
+        val right = recursiveDiameter(root.right, diameter)
+        // calculate the diameter of the current node
+        diameter[0] = max(diameter[0], left + right)
+
+        // return the height
+        return max(left, right) + 1
+    }
+
     var max = 0
 
     /**
      * Does a post order traversal of binary trees.
      */
-    fun diameterOfBinaryTree(root: TreeNode?): Int {
-        recursiveDiameter(root)
+    fun diameterOfBinaryTree2(root: TreeNode?): Int {
+        recursiveDiameter2(root)
         return max
     }
 
-    private fun recursiveDiameter(root: TreeNode?): Int {
+    private fun recursiveDiameter2(root: TreeNode?): Int {
         if (root == null) return 0
 
-        val left = recursiveDiameter(root.left)
-        val right = recursiveDiameter(root.right)
+        val left = recursiveDiameter2(root.left)
+        val right = recursiveDiameter2(root.right)
         max = max(max, left + right)
         return 1 + max(left, right)
     }
