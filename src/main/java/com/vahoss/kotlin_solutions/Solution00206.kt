@@ -5,6 +5,27 @@ import com.vahoss.createListNodeFromArray
 import com.vahoss.println
 
 class Solution00206 {
+
+    /**
+     * Another iterative solution.
+     */
+    fun reverseList(head: ListNode?): ListNode? {
+        // for null or cases where we have only one element
+        if (head?.next == null) return head
+
+        var current = head
+        var prev: ListNode? = null
+
+        while (current != null) {
+            val newHead = current.next
+            current.next = prev
+            prev = current
+            current = newHead
+        }
+
+        return prev
+    }
+
     fun reverseListRecursive(head: ListNode?): ListNode? {
         if (head?.next == null) return head
 
@@ -74,7 +95,7 @@ class Solution00206 {
         return node
     }
 
-    fun reverseList(head: ListNode?): ListNode? {
+    fun reverseList2(head: ListNode?): ListNode? {
         var counter = 0
         var newHead = head
         while (newHead != null) {
@@ -100,7 +121,10 @@ class Solution00206 {
 
 fun main() {
     val s = Solution00206()
+    println(s.reverseList(createListNodeFromArray(intArrayOf(1, 2, 3, 4, 5))))
     println(s.reverseListPreserving(createListNodeFromArray(intArrayOf(1, 2, 3, 4, 5))))
+    println(s.reverseList(createListNodeFromArray(intArrayOf(1, 2))))
     println(s.reverseListPreserving(createListNodeFromArray(intArrayOf(1, 2))))
+    println(s.reverseList(createListNodeFromArray(intArrayOf())))
     println(s.reverseListPreserving(createListNodeFromArray(intArrayOf())))
 }
