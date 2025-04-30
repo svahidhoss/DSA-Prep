@@ -1,7 +1,61 @@
 package com.vahoss.kotlin_solutions
 
 class Solution00994 {
+    data class Point(val x: Int, val y: Int)
+
     fun orangesRotting(grid: Array<IntArray>): Int {
+        // Find al the fresh and rotten orange
+        val queue = ArrayDeque<Point>()
+        // To know if we have finished rotting
+        val freshSet = mutableSetOf<Point>()
+        grid.forEachIndexed { row, ints ->
+            ints.forEachIndexed { col, v ->
+                when (v) {
+                    1 -> freshSet.add(Point(row, col))
+                    2 -> queue.add(Point(row, col))
+                    else -> {}
+                }
+            }
+        }
+
+        var minute = 0
+        val nextMinuteQueue = ArrayDeque<Point>()
+        while (queue.isNotEmpty()) {
+            val currentPoint = queue.removeFirst()
+            rot(currentPoint, grid, freshSet, nextMinuteQueue)
+            if (queue.isEmpty() && nextMinuteQueue.isNotEmpty()) {
+                minute++
+                queue.addAll(nextMinuteQueue)
+                nextMinuteQueue.clear()
+            }
+        }
+
+        // if not all fresh oranges have become rotten, we have not succeeded
+        return if (freshSet.isNotEmpty()) -1 else minute
+    }
+
+    private fun rot(
+        point: Point,
+        grid: Array<IntArray>,
+        freshSet: MutableSet<Point>,
+        nextMinuteQueue: ArrayDeque<Point>
+    ) {
+        val directions = arrayOf(Pair(1, 0), Pair(0, 1), Pair(-1, 0), Pair(0, -1))
+        val rows = grid.size
+        val cols = grid[0].size
+        for ((dx, dy) in directions) {
+            val newX = point.x + dx
+            val newY = point.y + dy
+            // check the boundary and it is not part of rotten set
+            if (newX in 0 until rows && newY in 0 until cols) {
+                val newPoint = Point(newX, newY)
+                if (freshSet.remove(newPoint)) nextMinuteQueue.add(newPoint)
+            }
+        }
+    }
+
+
+    fun orangesRotting2(grid: Array<IntArray>): Int {
         // Find all the rotten and fresh oranges
         val rotten = mutableSetOf<Pair<Int, Int>>()
         val fresh = mutableSetOf<Pair<Int, Int>>()
