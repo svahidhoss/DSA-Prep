@@ -1,10 +1,62 @@
 package com.vahoss.kotlin_solutions
 
 class Solution00994 {
+    fun orangesRotting(grid: Array<IntArray>): Int {
+        // Find all the rotten orange and the count of fresh ones
+        val queue = ArrayDeque<Pair<Int, Int>>()
+        // To know if we have finished rotting
+        var freshCount = 0
+        grid.forEachIndexed { row, ints ->
+            ints.forEachIndexed { col, v ->
+                when (v) {
+                    1 -> freshCount++
+                    2 -> queue.addLast(Pair(row, col))
+                    else -> {}
+                }
+            }
+        }
+
+        if (freshCount == 0) return 0
+
+        val directions = arrayOf(Pair(1, 0), Pair(0, 1), Pair(-1, 0), Pair(0, -1))
+        var minutes = 0
+        val rows = grid.size
+        val cols = grid[0].size
+        while (queue.isNotEmpty()) {
+            // number of elements in the queue for this level
+            val count = queue.size
+            var anyRotten = false
+
+            repeat(count) {
+                val point = queue.removeFirst()
+                for ((dx, dy) in directions) {
+                    val newX = point.first + dx
+                    val newY = point.second + dy
+                    // check the boundary and if it is a fresh orange
+                    if (newX in 0 until rows && newY in 0 until cols
+                        && grid[newX][newY] == 1
+                    ) {
+                        // mark as rotten
+                        grid[newX][newY] = 2
+                        freshCount--
+                        // visit later
+                        queue.add(Pair(newX, newY))
+                        anyRotten = true
+                    }
+                }
+            }
+
+            if (anyRotten) minutes++
+        }
+
+        // if not all fresh oranges have become rotten, we have not succeeded
+        return if (freshCount > 0) -1 else minutes
+    }
+
     data class Point(val x: Int, val y: Int)
 
-    fun orangesRotting(grid: Array<IntArray>): Int {
-        // Find al the fresh and rotten orange
+    fun orangesRotting1(grid: Array<IntArray>): Int {
+        // Find all the fresh and rotten orange
         val queue = ArrayDeque<Point>()
         // To know if we have finished rotting
         val freshSet = mutableSetOf<Point>()
