@@ -5,6 +5,26 @@ class Solution00733 {
 
     fun floodFill(image: Array<IntArray>, sr: Int, sc: Int, color: Int): Array<IntArray> {
         val origColor = image[sr][sc]
+        // BFS search
+        val deque = ArrayDeque<Pair<Int, Int>>()
+        if (origColor != color) deque.add(Pair(sr, sc))
+
+        while (deque.isNotEmpty()) {
+            val (x, y) = deque.removeFirst()
+            image[x][y] = color
+            for ((dx, dy) in directions) {
+                val newX = x + dx
+                val newY = y + dy
+                if(newX in image.indices && newY in image[0].indices && image[newX][newY] == origColor)
+                    deque.add(Pair(newX, newY))
+            }
+        }
+
+        return image
+    }
+
+    fun floodFillDFS(image: Array<IntArray>, sr: Int, sc: Int, color: Int): Array<IntArray> {
+        val origColor = image[sr][sc]
         // Early return if original color is the same as new color (prevents infinite recursion)
         if (origColor == color) return image
 
@@ -24,5 +44,33 @@ class Solution00733 {
                 }
             }
         }
+    }
+
+    fun floodFillDFS2(image: Array<IntArray>, sr: Int, sc: Int, color: Int): Array<IntArray> {
+        val origColor = image[sr][sc]
+        if (origColor == color) return image
+
+        val stack = ArrayDeque<Pair<Int, Int>>()
+        stack.add(Pair(sr, sc))
+
+        while (stack.isNotEmpty()) {
+            val (x, y) = stack.removeLast()
+            image[x][y] = color
+
+            for ((dx, dy) in directions) {
+                val newX = x + dx
+                val newY = y + dy
+
+                if (
+                    newX in image.indices &&
+                    newY in image[0].indices &&
+                    image[newX][newY] == origColor
+                ) {
+                    stack.add(Pair(newX, newY))
+                }
+            }
+        }
+
+        return image
     }
 }

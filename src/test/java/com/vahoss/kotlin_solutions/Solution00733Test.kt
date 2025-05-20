@@ -50,13 +50,13 @@ class Solution00733Test {
 
         val result1 = solution.floodFill(copyImage(image1), sr1, sc1, color1)
 
-        assertArrayEquals(expected1, result1)
         println("Original: ")
         printImage(image1)
         println("Expected: ")
         printImage(expected1)
         println("Result: ")
         printImage(result1)
+        assertArrayEquals(expected1, result1)
     }
 
     @Test
