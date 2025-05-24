@@ -8,7 +8,7 @@ class Solution00104 {
 
         var maxDepth = 0
         val stack = ArrayDeque<TreeNodeDepth>()
-        stack.add(TreeNodeDepth(root, 0))
+        stack.add(TreeNodeDepth(root, 1))
         while (stack.isNotEmpty()) {
             val node = stack.removeLast()
             maxDepth = maxOf(maxDepth, node.depth)
@@ -26,7 +26,8 @@ class Solution00104 {
     data class TreeNodeDepth(val tn: TreeNode, val depth: Int)
 
     fun maxDepth(root: TreeNode?): Int {
-        if (root == null) return 0
+        root ?: return 0
+
         return maxOf(maxDepth(root.left), maxDepth(root.right)) + 1
     }
 }
