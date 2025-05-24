@@ -9,19 +9,21 @@ class Solution00207 {
         prerequisites.forEach { (a, b) ->
             courses[a].prerequisites.add(courses[b])
         }
-        val coursesPreReqState = BooleanArray(numCourses) { courseNum ->
+
+        // keeps track of fully processed nodes
+        val visited = BooleanArray(numCourses) { courseNum ->
             // if no pre-req make them true
             courses[courseNum].prerequisites.isEmpty()
         }
-        // for finding cycles:
+        // current DFS path (for finding cycles):
         val onPath = BooleanArray(numCourses)
 
-        // DFS
+        // DFS: Go over all nodes because they may not all be connected
         courses.forEach { course ->
-            visitCourse(course, courses, coursesPreReqState, onPath)
+            visitCourse(course, courses, visited, onPath)
         }
 
-        return coursesPreReqState.all { it }
+        return visited.all { it }
     }
 
     private fun visitCourse(
