@@ -10,9 +10,6 @@ class Solution00039 {
         return result
     }
 
-    /**
-     *
-     */
     private fun recursiveCombinationSum(
         candidates: IntArray,
         target: Int,
@@ -41,6 +38,32 @@ class Solution00039 {
         // Return true to allow upper levels to keep exploring
         return true
     }
+
+    fun combinationSum2(candidates: IntArray, target: Int): List<List<Int>> {
+        val result = mutableListOf<List<Int>>()
+        val sortedCandidates = candidates.sortedArray()
+
+        fun backtrack(start: Int, remaining: Int, current: MutableList<Int>) {
+            if (remaining == 0) {
+                result.add(ArrayList(current))
+                return
+            }
+
+            for (i in start until sortedCandidates.size) {
+                val candidate = sortedCandidates[i]
+                if (candidate > remaining) break  // Early pruning
+
+                current.add(candidate)
+                backtrack(i, remaining - candidate, current)
+                current.removeAt(current.lastIndex)  // Backtrack
+            }
+        }
+
+        backtrack(0, target, mutableListOf())
+        return result
+    }
+
+
 }
 
 fun main() {
