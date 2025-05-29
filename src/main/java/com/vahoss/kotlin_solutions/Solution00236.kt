@@ -4,7 +4,7 @@ import com.vahoss.Node
 import com.vahoss.TreeNode
 import java.lang.IllegalStateException
 
-class Solution0236 {
+class Solution00236 {
     fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
         if (root == null || root == q || root == p)
             return root
@@ -120,6 +120,6 @@ fun main() {
 
     tree.right!!.left = TreeNode(0)
     tree.right!!.right = TreeNode(8)
-    val sol = Solution0236()
+    val sol = Solution00236()
     println(sol.lowestCommonAncestor(tree, tree.left, tree.left!!.right!!.right)?.`val`)
 }
