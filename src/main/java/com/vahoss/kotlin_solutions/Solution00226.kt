@@ -42,6 +42,27 @@ class Solution00226 {
         return root
     }
 
+    /**
+     * This implementation of invertTree() uses a DFS
+     * (Depth-First Search) approach, specifically a post-order traversal:
+     *
+     * 1.Recursive Stack Usage: The code uses the call stack through
+     * recursion to traverse the tree, which is characteristic of
+     * DFS implementations.
+     * 2.Complete Subtree Processing: Before returning to the parent node,
+     * the function completely processes the left and right subtrees.
+     * 3.Post-Order Traversal Pattern: The code follows a post-order traversal pattern:
+     * -First recursively process the right subtree: invertTree(root.right)
+     * -Then recursively process the left subtree: invertTree(temp)
+     * (where temp holds the original left subtree)
+     * -Finally process the current node (swapping the children)
+     *
+     * Time and space complexity:
+     * -The algorithm has O(n) time complexity where
+     * n is the number of nodes.
+     * -It uses O(h) space complexity for the recursion stack,
+     * where h is the height of the tree.
+     */
     fun invertTreeRecursive(root: TreeNode?): TreeNode? {
         if (root == null) return null
 
@@ -67,16 +88,20 @@ fun main() {
 
     val sol = Solution00226()
     var result = sol.invertTree(tree)
+
     println(result)
+    println(sol.invertTreeRecursive(tree))
 
     tree = TreeNode(2)
     tree.left = TreeNode(1)
     tree.right = TreeNode(3)
     result = sol.invertTree(tree)
     println(result)
+    println(sol.invertTreeRecursive(tree))
 
     tree = TreeNode(1)
     tree.left = TreeNode(2)
     result = sol.invertTree(tree)
     println(result)
+    println(sol.invertTreeRecursive(tree))
 }
