@@ -39,7 +39,7 @@ class Solution00207 {
 
         // check the visited state of all pre-reqs
         course.prerequisites.forEach {
-            if(!visitCourse(it, courses, visited, onPath)) return false
+            if (!visitCourse(it, courses, visited, onPath)) return false
         }
 
         // The DFS for this course is done — we're no longer "on the current path"
@@ -48,6 +48,44 @@ class Solution00207 {
         visited[course.courseNum] = true
         return true
     }
+
+    fun canFinish2(numCourses: Int, prerequisites: Array<IntArray>): Boolean {
+        val graph = Array(numCourses) { mutableListOf<Int>() }
+
+        // Build graph: edge from a → b means a depends on b
+        for ((a, b) in prerequisites) {
+            graph[a].add(b)
+        }
+
+        // fully processed nodes (safe)
+        val visited = BooleanArray(numCourses)
+        // current DFS path (for cycle detection)
+        val onPath = BooleanArray(numCourses)
+
+        // DFS to detect cycles
+        fun dfs(course: Int): Boolean {
+            if (onPath[course]) return false       // cycle found!
+            if (visited[course]) return true       // already verified: safe
+
+            onPath[course] = true
+
+            for (prereq in graph[course]) {
+                if (!dfs(prereq)) return false     // propagate cycle failure
+            }
+
+            onPath[course] = false  // backtrack from the course
+            visited[course] = true  // mark as visited
+            return true
+        }
+
+        // Run DFS from every course (in case of disconnected components)
+        for (course in 0 until numCourses) {
+            if (!dfs(course)) return false
+        }
+
+        return true
+    }
+
 }
 
 fun main() {
@@ -86,7 +124,7 @@ fun main() {
     val solution = Solution00207()
     testCases.forEachIndexed { index, (input, expected) ->
         val (numCourses, prereqs) = input
-        val result = solution.canFinish(numCourses, prereqs)
+        val result = solution.canFinish2(numCourses, prereqs)
         println("Test $index: ${if (result == expected) "✅ Passed" else "❌ Failed"} (Expected: $expected, Got: $result)")
     }
 }
