@@ -1,17 +1,50 @@
 package com.vahoss.kotlin_solutions
 
-import java.util.*
 import kotlin.math.max
 
-class Solution0121 {
-    fun maxProfit(prices: IntArray): Int {
-        // create a sorted version of the array
-        val sorted = prices.sorted()
-        // starting from prices index, find the 1st minimum
-        prices.forEachIndexed { i, v ->
+class Solution00121 {
 
+    /**
+     * O(n) solution. At each step:
+     *
+     * You’ve seen all prices up to this point.
+     *
+     * You’ve tracked the best buying opportunity so far (minPrice).
+     *
+     */
+    fun maxProfit(prices: IntArray): Int {
+        var minPrice = Int.MAX_VALUE
+        var maxProfit = Int.MIN_VALUE
+
+        prices.forEach { price ->
+            if (price < minPrice) minPrice = price
+            val minPriceDiff = price - minPrice
+            if (minPriceDiff > maxProfit) maxProfit = minPriceDiff
         }
-        return 0
+
+        return maxProfit
+    }
+
+    /**
+     * This is still a O(n^2) solution.
+     */
+    fun maxProfit1(prices: IntArray): Int {
+        // starting from prices index, find the 1st minimum
+        return maxProfit(prices, 0, prices.lastIndex, 0)
+    }
+
+    private fun maxProfit(prices: IntArray, beg: Int, end: Int, result: Int): Int {
+        if (end <= beg) return result
+
+        val begElement = prices[beg]
+        val maxElement = prices[end]
+        val diff = maxElement - begElement
+        val updatedResult = maxOf(result, diff)
+        return if (diff > result) return updatedResult
+        else maxOf(
+            maxProfit(prices, beg + 1, end, updatedResult),
+            maxProfit(prices, beg, end - 1, updatedResult)
+        )
     }
 
     fun maxProfit2(prices: IntArray): Int {
@@ -50,10 +83,7 @@ class Solution0121 {
 }
 
 fun main() {
-    val array = Array(5) { it * 2 }
-    println(Arrays.toString(array))
-
-    val sol = Solution0121()
+    val sol = Solution00121()
     println(sol.maxProfit(intArrayOf(7, 1, 5, 3, 6, 4)))
     println(sol.maxProfit(intArrayOf(7, 6, 4, 3, 1)))
     println(sol.maxProfit(intArrayOf(2, 4, 1)))
