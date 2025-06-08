@@ -26,13 +26,13 @@ class Solution00023 {
         // create a min heap based on the int value of list node
         val minHeap = PriorityQueue<ListNode>(compareBy { it.`val` })
         // val minHeap = PriorityQueue<ListNode> { a, b -> a.`val` - b.`val` }
+
         // Add the head of each non-null list to the heap
         lists.filterNotNull().forEach {
             minHeap.offer(it)
         }
 
         var currNode = dummy
-
 
         while (minHeap.isNotEmpty()) {
             val newNode = minHeap.poll()
@@ -76,6 +76,33 @@ class Solution00023 {
             val newNode = ListNode(minHeap.poll())
             node.next = newNode
             node = newNode
+        }
+
+        return result.next
+    }
+
+    fun mergeKLists3(lists: Array<ListNode?>): ListNode? {
+        val minHeap = PriorityQueue<Pair<Int, Int>>(lists.size) { a, b -> a.first - b.first }
+
+        lists.forEachIndexed { i, listNode ->
+            if (listNode != null) {
+                minHeap.add(Pair(listNode.`val`, i))
+            }
+        }
+
+        val result = ListNode(-1)
+        var node = result
+        while (minHeap.isNotEmpty()) {
+            val (minValue, minListIndex) = minHeap.poll()
+            val newNode = ListNode(minValue)
+            node.next = newNode
+            node = node.next!!
+
+            // move the element one step forward
+            lists[minListIndex] = lists[minListIndex]?.next
+            lists[minListIndex]?.let {
+                minHeap.add(it.`val` to minListIndex)
+            }
         }
 
         return result.next

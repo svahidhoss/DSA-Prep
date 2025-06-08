@@ -1,6 +1,6 @@
 package com.vahoss.kotlin_solutions
 
-class TimeMap() {
+class TimeMap {
     private val valMap = mutableMapOf<String, MutableList<Pair<Int, String>>>()
 
     fun set(key: String, value: String, timestamp: Int) {
