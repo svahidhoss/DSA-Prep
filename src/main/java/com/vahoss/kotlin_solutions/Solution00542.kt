@@ -2,6 +2,8 @@ package com.vahoss.kotlin_solutions
 
 class Solution00542 {
 
+    // TODO solve using DP
+
     /**
      * Updates the input matrix so that each cell containing a 1 is replaced with the
      * distance to the nearest 0. Cells that already contain 0 remain unchanged.

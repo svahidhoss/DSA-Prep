@@ -8,9 +8,7 @@ class Solution00121 {
      * O(n) solution. At each step:
      *
      * You’ve seen all prices up to this point.
-     *
      * You’ve tracked the best buying opportunity so far (minPrice).
-     *
      */
     fun maxProfit(prices: IntArray): Int {
         var minPrice = Int.MAX_VALUE
@@ -26,7 +24,8 @@ class Solution00121 {
     }
 
     /**
-     * This is still a O(n^2) solution.
+     * This is still a O(n^2) solution:
+     * Not optimal.
      */
     fun maxProfit1(prices: IntArray): Int {
         // starting from prices index, find the 1st minimum
