@@ -3,7 +3,6 @@ package com.vahoss.kotlin_solutions
 import Solution00242
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Assertions.assertThrows
 import kotlin.time.measureTime
 
 class Solution00242Test {
@@ -166,6 +165,5 @@ class Solution00242Test {
 
             println("Execution time for different length rejection: $executionTime")
         }
-
     }
 }
