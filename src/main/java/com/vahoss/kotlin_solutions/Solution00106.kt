@@ -28,6 +28,51 @@ class Solution00106 {
         if (inorder.size != postorder.size) throw IllegalArgumentException("The size of the inorder must be the same as postorder")
         if (inorder.isEmpty() || postorder.isEmpty()) return null
 
+        val inorderMap = inorder.withIndex().associate { it.value to it.index }
+
+        return buildTree(
+            inorder, 0, inorder.lastIndex,
+            postorder, 0, postorder.lastIndex,
+            inorderMap
+        )
+    }
+
+    private fun buildTree(
+        inorder: IntArray,
+        begInorder: Int,
+        endInorder: Int,
+        postorder: IntArray,
+        begPostorder: Int,
+        endPostorder: Int,
+        map: Map<Int, Int>
+    ): TreeNode? {
+        // end values are exclusive
+        if (begInorder > endInorder || begPostorder > endPostorder) return null
+        val root = TreeNode(postorder[endPostorder])
+        // Find the index of the root in the inorder array
+        val rootIndex = map[root.`val`]!!
+
+        val leftSize = rootIndex - begInorder
+
+        root.left = buildTree(
+            inorder, begInorder, rootIndex - 1,
+            postorder, begPostorder, begPostorder + leftSize - 1,
+            map
+        )
+        root.right = buildTree(
+            inorder, rootIndex + 1, endInorder,
+            postorder, begPostorder + leftSize, endPostorder - 1,
+            map
+        )
+
+        return root
+    }
+
+    fun buildTree2(inorder: IntArray, postorder: IntArray): TreeNode? {
+        if (inorder.size != postorder.size) throw IllegalArgumentException("The size of the inorder must be the same as postorder")
+        if (inorder.isEmpty() || postorder.isEmpty()) return null
+
+        // Root is the last element in postorder traversal
         val root = TreeNode(postorder.last())
 
         val leftSize = inorder.indexOf(root.`val`)
