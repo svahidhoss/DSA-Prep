@@ -1,9 +1,54 @@
 package com.vahoss.kotlin_solutions
 
 
+class Solution00139Optimized {
+    fun wordBreak(s: String, wordDict: List<String>): Boolean {
+        val wordSet = wordDict.toHashSet()
+        val memo = mutableMapOf<Int, Boolean>()
+        return canBreakFrom(0, s, wordSet, memo)
+    }
+
+    private fun canBreakFrom(
+        start: Int,
+        s: String,
+        wordSet: Set<String>,
+        memo: MutableMap<Int, Boolean>
+    ): Boolean {
+        if (start == s.length) return true
+        if (start in memo) return memo[start]!!
+
+        for (end in start + 1..s.length) {
+            if (s.substring(start, end) in wordSet) {
+                if (canBreakFrom(end, s, wordSet, memo)) {
+                    memo[start] = true
+                    return true
+                }
+            }
+        }
+
+        memo[start] = false
+        return false
+    }
+}
 class Solution00139 {
     private val memo = mutableMapOf<String, Boolean>()
 
+    /**
+     * Each unique substring of s is evaluated at most once → O(n)
+     *
+     * For each substring, we try up to k words and startsWith(word) costs O(w) in the worst case
+     *
+     * So:
+     * Time = O(n * k * w)
+     *
+     * n = length of string s
+     * k = number of words in the dictionary
+     * w = average length of words in wordDict
+     *
+     * In practice, it’s usually much faster, because:
+     * The recursion ends early on invalid paths
+     * Dictionary lookups can be optimized using a Set
+     */
     fun wordBreak(s: String, wordDict: List<String>): Boolean {
         if (memo.containsKey(s)) return memo[s]!!
 
