@@ -1,7 +1,81 @@
 package com.vahoss.kotlin_solutions
 
 class Solution00994 {
+
+    /**
+     * You are given an m x n grid where each cell can have one of three values:
+     *
+     * 0 representing an empty cell,
+     * 1 representing a fresh orange, or
+     * 2 representing a rotten orange.
+     * Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+     *
+     * Return the minimum number of minutes that must elapse until
+     * no cell has a fresh orange. If this is impossible, return -1.
+     */
     fun orangesRotting(grid: Array<IntArray>): Int {
+        var minute = 0
+        val queue = ArrayDeque<Pair<Int, Int>>()
+        // 1.scan the whole grid for rotten oranges
+        for (i in grid.indices) {
+            for (j in grid[i].indices) {
+                if (grid[i][j] == 2) {
+                    queue.add(Pair(i, j))
+                }
+            }
+        }
+
+        // 2. Start doing a bfs with the rotten orange, add new elements to the new queue
+        val newQueue = mutableListOf<Pair<Int, Int>>()
+        while (queue.isNotEmpty()) {
+            val pair = queue.removeFirst()
+            // Check the adjacent points
+            val points = getAdjacentPoints(pair, grid)
+            newQueue.addAll(points)
+
+            // Refresh the new queue
+            if (queue.isEmpty() && newQueue.isNotEmpty()) {
+                queue.addAll(newQueue)
+                newQueue.clear()
+                minute++
+            }
+        }
+
+        // 3. Scan the whole grid for fresh oranges: return -1 if needed
+        for (i in grid.indices) {
+            for (j in grid[i].indices) {
+                if (grid[i][j] == 1) {
+                    return -1
+                }
+            }
+        }
+
+        // 4. return the min number of minutes
+        return minute
+    }
+
+    private val directions = arrayOf(intArrayOf(0, 1), intArrayOf(-1, 0), intArrayOf(0, -1), intArrayOf(1, 0))
+
+    private fun getAdjacentPoints(pair: Pair<Int, Int>, grid: Array<IntArray>): List<Pair<Int, Int>> {
+        val result = mutableListOf<Pair<Int, Int>>()
+
+        directions.forEach {
+            val newRow = pair.first + it[0]
+            val newCol = pair.second + it[1]
+            if (newRow in grid.indices && newCol in grid[0].indices
+                && grid[newRow][newCol] == 1
+            ) {
+                // Mark as rotten:
+                grid[newRow][newCol] = 2
+                result.add(Pair(newRow, newCol))
+            }
+        }
+
+        return result
+    }
+
+
+    fun orangesRottingOptimized(grid: Array<IntArray>): Int {
         // Find all the rotten orange and the count of fresh ones
         val queue = ArrayDeque<Pair<Int, Int>>()
         // To know if we have finished rotting
