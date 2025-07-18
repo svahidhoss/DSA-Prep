@@ -41,30 +41,32 @@ class Solution00670 {
         return num
     }
 
-    /**
-     * Incomplete solution
-     */
     fun maximumSwap2(num: Int): Int {
-        if (num <= 0) return 0
+        val digits = num.toString().map { it.toString().toInt() }.toMutableList()
+        val digitIndexArray = IntArray(10) { -1 }
 
-        // counter array
-        val digitArray = IntArray(10) { -1 }
-
-        var numMod10 = num % 10
-        var numDiv10 = num
-        var currentIndex = num.toString().lastIndex
-        while (numDiv10 != 0) {
-            numMod10 = numDiv10 % 10
-            if (numMod10 == 9) {
-                // we have found the swap!!
-                break
-            }
-            numDiv10 /= 10
-            currentIndex--
+        // Store rightmost index of each digit
+        digits.forEachIndexed { i, v ->
+            digitIndexArray[v] = i
         }
 
-        // TODO fix
-        return num
+        // Check each position from left to right
+        for (i in digits.indices) {
+            // Look for the largest digit that appears after position i
+            for (digit in 9 downTo digits[i] + 1) {
+                val indexToSwap = digitIndexArray[digit]
+                if (indexToSwap > i) {
+                    // Swap and return immediately
+                    val temp = digits[i]
+                    digits[i] = digits[indexToSwap]
+                    digits[indexToSwap] = temp
+
+                    return digits.joinToString("").toInt()
+                }
+            }
+        }
+
+        return num // No beneficial swap found
     }
 }
 
