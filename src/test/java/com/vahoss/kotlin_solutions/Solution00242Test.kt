@@ -1,6 +1,5 @@
 package com.vahoss.kotlin_solutions
 
-import Solution00242
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import kotlin.time.measureTime

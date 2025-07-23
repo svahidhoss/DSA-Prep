@@ -65,8 +65,8 @@ class Solution00071 {
         // process each substring
         for (dirName in paths) {
             when (dirName) {
-                "" -> continue
-                "." -> continue
+                "" -> continue  // ignore
+                "." -> continue // ignore
                 ".." -> {
                     // remove the last dir
                     if (newPaths.isNotEmpty()) newPaths.removeLast()

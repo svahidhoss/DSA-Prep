@@ -67,6 +67,8 @@ class Solution00139 {
     }
 }
 
+// TODO add a bottom - up solution
+
 /**
  * My first attempt without memoization.
  */
