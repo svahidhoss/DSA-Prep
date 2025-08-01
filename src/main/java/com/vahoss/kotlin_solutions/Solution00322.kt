@@ -3,7 +3,45 @@ package com.vahoss.kotlin_solutions
 import kotlin.math.min
 
 class Solution00322 {
+
+
+    /**
+     * Coin Change Problem - Dynamic Programming Bottom-Up Approach
+     *
+     * Time Complexity: O(amount × coins.length)
+     * - Outer loop runs 'amount' times
+     * - Inner loop runs 'coins.length' times for each amount
+     * - Each operation inside loops is O(1)
+     * - Total: amount × coins.length × O(1) = O(amount × coins.length)
+     *
+     * Space Complexity: O(amount)
+     * - DP array of size (amount + 1)
+     * - All other variables use constant space
+     *
+     * @param coins Array of available coin denominations
+     * @param amount Target amount to make
+     * @return Minimum number of coins needed, or -1 if impossible
+     */
     fun coinChange(coins: IntArray, amount: Int): Int {
+        val mem = IntArray(amount + 1) { Int.MAX_VALUE }
+        mem[0] = 0
+
+        for (i in 1..amount) {
+            for (coin in coins) {
+                if (i >= coin &&  mem[i - coin] != Int.MAX_VALUE) {
+                    // Recurrence relation: dp[i] = min(dp[i], 1 + dp[i - coin])
+                    // 1 represents using the current coin
+                    // dp[i - coin] represents minimum coins for remaining amount
+                    mem[i] = min(mem[i], mem[i - coin] + 1)
+                }
+            }
+        }
+
+        return if (mem[amount] == Int.MAX_VALUE) -1 else mem[amount]
+    }
+
+
+    fun coinChangeRec(coins: IntArray, amount: Int): Int {
         val mem = mutableMapOf(0 to 0)
         val result = dp(coins.sortedArray(), amount, mem)
         return if (result == Int.MAX_VALUE) -1 else result
@@ -15,9 +53,7 @@ class Solution00322 {
 
         // Use binary search, if found use base case
         var foundIndex = coins.binarySearch(amount)
-//        if (foundIndex >= 0) return 1
         if (foundIndex < 0) { // -foundIndex - 1 is where it needs to be inserted
-//        else {
             foundIndex = min(-foundIndex - 2, coins.size - 1)
         }
 
@@ -32,28 +68,6 @@ class Solution00322 {
         }
 
         return minCoinCount
-    }
-
-    fun coinChange2(coins: IntArray, amount: Int): Int {
-        if (amount == 0) return 0
-        val dp = IntArray(amount + 1) { Int.MAX_VALUE }
-        // Base case: 0 coins are needed to make the amount 0
-        dp[0] = 0
-
-        // Ensure coins are sorted for efficient access
-        coins.sort()
-
-        for (amt in 1..amount) {
-            for (coin in coins) {
-                // No need to check larger coins
-                if (coin > amt) break
-                if (dp[amt - coin] != Int.MAX_VALUE) {
-                    dp[amt] = minOf(dp[amt], dp[amt - coin] + 1)
-                }
-            }
-        }
-
-        return if (dp[amount] != Int.MAX_VALUE) dp[amount] else -1
     }
 
     fun coinChangeRecursive(coins: IntArray, amount: Int, memo: IntArray): Int {
@@ -84,9 +98,12 @@ class Solution00322 {
 
 fun main() {
     val s = Solution00322()
-    println(s.coinChange(intArrayOf(186, 419, 83, 408), 6249))
-    println(s.coinChange(intArrayOf(1), 0))
-    println(s.coinChange(intArrayOf(2), 3))
     println(s.coinChange(intArrayOf(1, 2, 5), 11))
+    println("Expected answer is 3")
+    println(s.coinChange(intArrayOf(1), 0))
+    println("Expected answer is 0")
+    println(s.coinChange(intArrayOf(2), 3))
+    println("Expected answer is -1")
+    println(s.coinChange(intArrayOf(186, 419, 83, 408), 6249))
     println(s.coinChange(intArrayOf(2, 5, 10, 1), 27))
 }
