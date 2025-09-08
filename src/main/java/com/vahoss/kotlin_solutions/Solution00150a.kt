@@ -1,7 +1,34 @@
 package com.vahoss.kotlin_solutions
 
 class Solution00150a {
+
     fun evalRPN(tokens: Array<String>): Int {
+        val stack = ArrayDeque<Int>()
+
+        for (token in tokens) {
+            val number = token.toIntOrNull()
+
+            // if not a number, must be an operator
+            if (number == null) {
+                val b = stack.removeLast()
+                val a = stack.removeLast()
+                val result = when (token) {
+                    "+" -> a + b
+                    "-" -> a - b
+                    "/" -> a / b
+                    "*" -> a * b
+                    else -> throw Exception("Unsupported operator: $token")
+                }
+                stack.addLast(result)
+            } else {
+                stack.addLast(number)
+            }
+        }
+
+        return stack.removeLast()
+    }
+
+    fun evalRPN2(tokens: Array<String>): Int {
         val stack = ArrayDeque<Int>()
         var i = 0
         stack.addLast(tokens[i++].toInt())
