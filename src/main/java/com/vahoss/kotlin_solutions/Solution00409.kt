@@ -10,7 +10,7 @@ class Solution00409 {
 
         var result = 0
         var oddExists = false
-        map.forEach { (c, count) ->
+        map.forEach { (_, count) ->
             if (count % 2 == 0) result += count
             else {
                 result += count - 1
@@ -21,4 +21,10 @@ class Solution00409 {
         if (oddExists) result++
         return result
     }
+}
+
+fun main() {
+    val sol = Solution00409()
+    println(sol.longestPalindrome("abccccdd"))
+    println(sol.longestPalindrome("a"))
 }
