@@ -8,13 +8,14 @@ data class TrieNode(
 )
 
 class Trie() {
-
+    // Root is not linked to any char
     var root = TrieNode()
 
     fun insert(word: String) {
         var currentNode: TrieNode? = root
         for (c in word) {
-            // if current node char is c, go to next
+            // if any of the current node's children is linked to char c,
+            // use that or create a new TrieNode
             val nextNode = currentNode?.children?.getOrPut(c) {
                 TrieNode()
             }
