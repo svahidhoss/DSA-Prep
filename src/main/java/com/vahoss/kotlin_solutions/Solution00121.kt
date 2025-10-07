@@ -1,8 +1,26 @@
 package com.vahoss.kotlin_solutions
 
 import kotlin.math.max
+import kotlin.math.min
 
 class Solution00121 {
+
+    /**
+     * Single pass solution: the most optimized.
+     * Time complexity: O(n) - single pass
+     * Space complexity: O(1) - only two variables
+     */
+    fun maxProfit0(prices: IntArray): Int {
+        var min = Int.MAX_VALUE
+        var profit = 0
+
+        for (price in prices) {
+            min = min(min, price)
+            profit = max(profit, price - min)
+        }
+
+        return profit
+    }
 
     /**
      * O(n) solution. At each step:
@@ -21,6 +39,37 @@ class Solution00121 {
         }
 
         return maxProfit
+    }
+
+    /**
+     * This is not going to work for the problem
+     */
+    fun maxProfitTwoPointer(prices: IntArray): Int {
+        var maxValue = prices.last()
+        var maxIndex = prices.lastIndex
+        var minValue = prices.first()
+        var minIndex = 0
+
+        var profit = 0
+        var end = prices.lastIndex
+        var beg = 0
+
+        while (beg < prices.lastIndex && end > 0) {
+            if (prices[beg] <= minValue) {
+                minIndex = beg
+                minValue = prices[beg]
+            }
+            if (prices[end] >= maxValue) {
+                maxIndex = end
+                maxValue = prices[end]
+            }
+            if (maxIndex > minIndex) profit = max(profit, maxValue - minValue)
+            else break
+            beg++
+            end--
+        }
+
+        return profit
     }
 
     /**
@@ -84,6 +133,28 @@ class Solution00121 {
 fun main() {
     val sol = Solution00121()
     println(sol.maxProfit(intArrayOf(7, 1, 5, 3, 6, 4)))
+    println(sol.maxProfit0(intArrayOf(7, 1, 5, 3, 6, 4)))
+
     println(sol.maxProfit(intArrayOf(7, 6, 4, 3, 1)))
+    println(sol.maxProfit0(intArrayOf(7, 6, 4, 3, 1)))
+
     println(sol.maxProfit(intArrayOf(2, 4, 1)))
+    println(sol.maxProfit0(intArrayOf(2, 4, 1)))
+
+    println(sol.maxProfit(intArrayOf(2, 4, 1, 7)))
+    println(sol.maxProfit0(intArrayOf(2, 4, 1, 7)))
+
+    println(sol.maxProfit(intArrayOf(7, 1, 5, 3, 6, 4)))
+    println(sol.maxProfit0(intArrayOf(7, 1, 5, 3, 6, 4)))
+
+    println(sol.maxProfit(intArrayOf(2, 1, 2, 1, 0, 0, 1)))
+    println(sol.maxProfit0(intArrayOf(2, 1, 2, 1, 0, 0, 1)))
+    println(sol.maxProfitTwoPointer(intArrayOf(2, 1, 2, 1, 0, 0, 1)))
+
+    println(sol.maxProfit(intArrayOf(3, 3, 5, 0, 0, 3, 1, 4)))
+    println(sol.maxProfit0(intArrayOf(3, 3, 5, 0, 0, 3, 1, 4)))
+    println(sol.maxProfit(intArrayOf(5, 1, 5, 6, 3, 1, 8)))
+    println(sol.maxProfit0(intArrayOf(5, 1, 5, 6, 3, 1, 8)))
+    println(sol.maxProfit(intArrayOf(5, 10, 1, 9, 3)))
+    println(sol.maxProfit0(intArrayOf(5, 10, 1, 9, 3)))
 }
