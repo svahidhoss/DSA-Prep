@@ -1,5 +1,7 @@
 package com.vahoss.dp
 
+import kotlin.math.max
+
 class Solution00053 {
 
     /**
@@ -22,12 +24,11 @@ class Solution00053 {
 
     fun maxSubArray(nums: IntArray): Int {
         var result = Int.MIN_VALUE
-        var currentMax = 0
-        for (v in nums) {
-            // reset it if the current sum is below zero
-            if (currentMax < 0) currentMax = 0
-            currentMax += v
-            result = Math.max(result, currentMax)
+        var currentMax = Int.MIN_VALUE
+        for (num in nums) {
+            // At each, decide whether to start fresh or keep calculating the sum
+            currentMax = max(currentMax + num, num)
+            result = max(result, currentMax)
         }
 
         return result
