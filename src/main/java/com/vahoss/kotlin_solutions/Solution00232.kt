@@ -42,6 +42,7 @@ class MyQueue2 {
 }
 
 class MyQueue<T> {
+
     /**
      * Holds values as they are inserted.
      */
@@ -54,9 +55,12 @@ class MyQueue<T> {
     private val stack2 = ArrayDeque<T>()
 
     fun push(t: T) {
-        stack1.add(t)
+        stack1.addLast(t)
     }
 
+    /**
+     * Amortized O(1) for pop/peek. each element moves at most once
+     */
     fun pop(): T {
         if (stack2.isEmpty()) {
             while (stack1.isNotEmpty()) stack2.addLast(stack1.removeLast())
@@ -65,6 +69,9 @@ class MyQueue<T> {
         return stack2.removeLast()
     }
 
+    /**
+     * Amortized O(1) for pop/peek. each element moves at most once
+     */
     fun peek(): T {
         if (stack2.isEmpty()) {
             while (stack1.isNotEmpty()) stack2.addLast(stack1.removeLast())

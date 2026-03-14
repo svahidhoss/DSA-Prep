@@ -5,6 +5,27 @@ import com.vahoss.createListNodeFromArray
 
 class Solution00021 {
 
+    /**
+     * the trade-off: The recursive solution is O(n + m) time but also
+     * O(n + m) space due to the call stack. If asked about optimizing space,
+     * the iterative approach with a dummy head node brings it to O(1) space
+     */
+    fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+        // if one is null return the other
+        if (list1 == null) return list2
+        if (list2 == null) return list1
+
+        if (list1.`val` <= list2.`val`) {
+            val result = mergeTwoLists(list1.next, list2)
+            list1.next = result
+            return list1
+        } else {
+            val result = mergeTwoLists(list1, list2.next)
+            list2.next = result
+            return list2
+        }
+    }
+
     fun mergeTwoListsRecursive(list1: ListNode?, list2: ListNode?): ListNode? {
         if (list1 == null) return list2
         if (list2 == null) return list1
@@ -21,7 +42,7 @@ class Solution00021 {
     /**
      * Improved iterative version.
      */
-    fun mergeTwoLists(list1: ListNode?, list2: ListNode?): ListNode? {
+    fun mergeTwoLists1(list1: ListNode?, list2: ListNode?): ListNode? {
         val result = ListNode(-1)
         var current = result
 
@@ -70,6 +91,24 @@ fun main() {
         s.mergeTwoListsRecursive(
             createListNodeFromArray(intArrayOf(1, 2, 4)),
             createListNodeFromArray(intArrayOf(1, 3, 4))
+        )
+    )
+    println(
+        s.mergeTwoListsRecursive(
+            createListNodeFromArray(intArrayOf()),
+            createListNodeFromArray(intArrayOf())
+        )
+    )
+    println(
+        s.mergeTwoListsRecursive(
+            createListNodeFromArray(intArrayOf()),
+            createListNodeFromArray(intArrayOf(0))
+        )
+    )
+    println(
+        s.mergeTwoListsRecursive(
+            createListNodeFromArray(intArrayOf(0)),
+            createListNodeFromArray(intArrayOf())
         )
     )
 }
