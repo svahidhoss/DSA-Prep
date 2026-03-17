@@ -15,22 +15,48 @@ import kotlin.math.*
  */
 class Solution00110 {
     fun isBalanced(root: TreeNode?): Boolean {
+        return isBalancedHeight(root) != -1
+    }
+
+    /**
+     * This solution uses a Post-order DFS approach.
+     * Returning -1 means the node is unbalanced!
+     *
+     * Time Complexity: O(n) each node is visited exactly once.
+     * Space Complexity: O(h) where h is the height of the
+     * tree due to recursion stack (O(log n) for balanced trees,
+     * O(n) worst case)
+     */
+    private fun isBalancedHeight(root: TreeNode?): Int {
+        if (root == null) return 0
+
+        val left = isBalancedHeight(root.left)
+        val right = isBalancedHeight(root.right)
+
+        return when {
+            (left == -1 || right == -1) -> -1
+            (abs(left - right) > 1) -> -1
+            else -> max(left, right) + 1
+        }
+    }
+
+    fun isBalanced0(root: TreeNode?): Boolean {
         return getHeightAndBalance(root) != -1
     }
 
     /**
+     * This solution uses a Post-order DFS approach.
      * -1 means the node is unbalanced.
      */
     private fun getHeightAndBalance(root: TreeNode?): Int {
         if (root == null) return 0
         val left = getHeightAndBalance(root.left)
-        if (left == -1) return -1
+        if (left == -1) return -1   // early short circuit
 
         val right = getHeightAndBalance(root.right)
-        if (right == -1) return -1
+        if (right == -1) return -1  // early short circuit
 
-        return if (abs(left - right) <= 1) (1 + max(left, right))
-        else -1
+        return if (abs(left - right) <= 1) max(left, right) + 1 else -1
     }
 }
 
