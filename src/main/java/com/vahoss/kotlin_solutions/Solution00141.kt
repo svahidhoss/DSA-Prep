@@ -4,19 +4,38 @@ import com.vahoss.ListNode
 import com.vahoss.createListNodeFromArray
 
 class Solution00141 {
+
     fun hasCycle(head: ListNode?): Boolean {
+        if (head?.next == null) return false
+        var slow = head
+        var fast = head
+
+        while (fast?.next != null) {
+            slow = slow?.next
+            fast = fast?.next?.next
+            if (slow == fast) return true
+        }
+
+        return false
+    }
+
+    fun hasCycleLLinear(head: ListNode?): Boolean {
         val visitedNodeSet = mutableSetOf<ListNode>()
         var h = head
 
-        while (h != null && !visitedNodeSet.contains(h)) {
+        while (h != null) {
+            if (visitedNodeSet.contains(h)) return true
             visitedNodeSet.add(h)
             h = h.next
         }
-
-        h?.let { return true } ?: return false
+        return false
     }
 
-    fun hasCycle2(head: ListNode?): Boolean {
+    /**
+     * It mutates the input data, which could be considered
+     * a red flag in interview
+     */
+    fun hasCycleValueMutation(head: ListNode?): Boolean {
         var h = head
 
         while (h != null && h.`val` != Int.MAX_VALUE) {
@@ -24,7 +43,7 @@ class Solution00141 {
             h = h.next
         }
 
-        h?.let { return true } ?: return false
+        return h != null
     }
 
     fun detectCycle(head: ListNode?): ListNode? {
@@ -50,11 +69,13 @@ class Solution00141 {
 }
 
 fun main() {
+    val sol = Solution00141()
+
     val sample = createListNodeFromArray(intArrayOf(3, 2, 0, -4))
     val secondNode = sample?.next
     sample?.next?.next?.next?.next = secondNode
 
-    val sol = Solution00141()
-    val result = sol.detectCycle(sample)
-    print(result?.`val`)
+    val result = sol.hasCycle(sample)
+    print(result)
+//    print(result?.`val`)
 }
