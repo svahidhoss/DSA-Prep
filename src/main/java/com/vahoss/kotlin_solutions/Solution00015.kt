@@ -3,27 +3,32 @@ package com.vahoss.kotlin_solutions
 class Solution00015 {
 
     /**
-     * Time complexity: O(n^2)
-     * Space complexity: O(n)
+     * Pros:
+     * - Correctly handles duplicate values (e.g. [0,0,0]) by storing all indices per key
+     * - Does not require sorting the input array
+     *
+     * Cons:
+     * - Average-case O(n^2): when values are spread across many distinct keys, each targetList
+     *   has O(1) entries on average
+     * - Worst-case O(n^3): when many elements share the same value, targetList has O(n) entries,
+     *   making the inner forEach an O(n) loop inside the O(n^2) outer loops
+     * - O(n) extra space for the map (in addition to the result set)
+     * - Sorting each triplet before insertion adds overhead per found triplet
      */
-    fun threeSum2(nums: IntArray): List<List<Int>> {
+    fun threeSum1(nums: IntArray): List<List<Int>> {
         val result = mutableSetOf<List<Int>>()
 
-        // Add all the values to the map
-        val map = mutableMapOf<Int, Int>()
+        val map = mutableMapOf<Int, MutableList<Int>>()
         nums.forEachIndexed { i, num ->
-            map[num] = i
+            map.getOrPut(num) { mutableListOf() }.add(i)
         }
 
-        // Outer loop to iterate over the first element
         for (i in nums.indices) {
-            // Inner loop to iterate over the second element
             for (j in i + 1..nums.lastIndex) {
-                // since the sum of all these values must be 0
-                // The target third value we're looking for
-                val target = -nums[i] - nums[j]
-                map[target]?.let {
-                    if (i != it && j != it) result.add(listOf(target, nums[i], nums[j]).sorted())
+                if (i == j) continue
+                val targetList = map[-(nums[i] + nums[j])]
+                targetList?.forEach {
+                    if (i != it && j != it) result.add(listOf(nums[i], nums[j], nums[it]).sorted())
                 }
             }
         }
@@ -31,20 +36,23 @@ class Solution00015 {
         return result.toList()
     }
 
+
     /**
-     * Time complexity: O(n^2)
-     * Space complexity: O(1)
+     * Time complexity: O(n^2) — O(n log n) sort + O(n^2) two-pointer scan
+     * Space complexity: O(1) auxiliary (excluding output)
      */
     fun threeSum(nums: IntArray): List<List<Int>> {
-        val result = mutableSetOf<List<Int>>()
+        val result = mutableListOf<List<Int>>()
         nums.sort()
 
         nums.forEachIndexed { i, num ->
-            // call two pointer based 2sum to find -num as target
+            // skip duplicate values of the fixed element to avoid duplicate triplets in output
+            if (i > 0 && nums[i] == nums[i - 1]) return@forEachIndexed
+            // find all pairs in nums[i+1..n-1] that sum to -num
             result.addAll(twoSumTwoPointer(nums, -num, i))
         }
 
-        return result.toList()
+        return result
     }
 
     private fun twoSumTwoPointer(numbers: IntArray, target: Int, begIndex: Int): MutableList<List<Int>> {
@@ -62,6 +70,7 @@ class Solution00015 {
                     p++
                     q--
                 }
+
                 sum < target -> p++
                 else -> q--
             }
