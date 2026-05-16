@@ -149,7 +149,7 @@ object Reader {
                 if (size == -1) return NC
                 bId = 0
             }
-            return buf[bId++].toChar()
+            return buf[bId++].toInt().toChar()
         }
 
     fun nextInt(): Int {

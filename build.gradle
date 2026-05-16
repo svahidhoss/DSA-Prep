@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+    id 'org.jetbrains.kotlin.jvm' version '2.3.21'
     id 'application'  // Add this to enable running main methods
 }
 
@@ -11,32 +11,8 @@ repositories {
     mavenCentral()
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java'] // Adjust if your Java files are elsewhere
-        }
-    }
-    test {
-        java {
-            srcDirs = ['src/test/java']
-        }
-    }
-}
-
 dependencies {
-    // Kotlin standard library (equivalent to KotlinJavaRuntime in IML)
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.20'
-
-    // JUnit 5 dependencies as per IML (version 5.8.1)
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testImplementation 'org.opentest4j:opentest4j:1.2.0'
-    testImplementation 'org.junit.platform:junit-platform-commons:1.8.1'
-    testImplementation 'org.apiguardian:apiguardian-api:1.1.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    testImplementation 'org.junit.platform:junit-platform-engine:1.8.1'
 
     // JUnit 4 dependencies as per IML (version 4.13.1)
     testImplementation 'junit:junit:4.13.1'
