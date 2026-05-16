@@ -22,7 +22,7 @@ mid = beg + (end - beg) / 2 = 1+2 = 3
  */
 class Solution00278 {
     fun firstBadVersion(n: Int): Int {
-        var left = 0
+        var left = 1
         var right = n
         while (left < right) {
             val mid = left + (right - left) / 2

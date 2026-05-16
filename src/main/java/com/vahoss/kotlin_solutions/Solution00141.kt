@@ -19,7 +19,7 @@ class Solution00141 {
         return false
     }
 
-    fun hasCycleLLinear(head: ListNode?): Boolean {
+    fun hasCycleLinear(head: ListNode?): Boolean {
         val visitedNodeSet = mutableSetOf<ListNode>()
         var h = head
 
