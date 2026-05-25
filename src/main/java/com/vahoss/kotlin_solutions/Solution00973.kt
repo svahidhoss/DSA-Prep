@@ -4,20 +4,58 @@ import java.util.PriorityQueue
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+data class Point0(val x: Int, val y: Int, val distance: Int)
+
+/**
+ * Optimal solution using a max-heap of size k.
+ *
+ * Approach: maintain a max-heap capped at k elements. For each new point, if it is
+ * closer than the current farthest (heap root), evict the root and insert the new point.
+ * After all n points the heap holds exactly the k closest.
+ *
+ * Uses squared distance (x² + y²) instead of sqrt — avoids floating-point entirely.
+ * Safe because sqrt is monotone, so relative order is preserved.
+ *
+ * Time:  O(n log k) — each point triggers at most one heap push/pop (log k)
+ * Space: O(k) — heap never exceeds k elements
+ */
+fun kClosest0(points: Array<IntArray>, k: Int): Array<IntArray> {
+    // Safe here since distances are non-negative, but worth swapping to:
+    // val maxHeap = PriorityQueue<Point0> { a, b -> b.distance - a.distance }
+    val maxHeap = PriorityQueue<Point0>(compareByDescending { it.distance })
+    points.forEach {
+        val newPoint = Point0(
+            it[0], it[1],
+            it[0] * it[0] + it[1] * it[1]
+        )
+        if (maxHeap.size == k) {
+            if (maxHeap.peek().distance > newPoint.distance) {
+                maxHeap.remove()
+                maxHeap.offer(newPoint)
+            }
+        } else { // size < k
+            maxHeap.offer(newPoint)
+        }
+
+    }
+    val result = mutableListOf<IntArray>()
+
+    repeat(k) {
+        val point = maxHeap.remove()
+        result.add(intArrayOf(point.x, point.y))
+    }
+
+    return result.toTypedArray()
+}
+
 data class Point(val distance: Double, val x: Int, val y: Int)
+
 
 /**
  * Optimal solution: O(n log k)
  */
 fun kClosest(points: Array<IntArray>, k: Int): Array<IntArray> {
-    val maxHeap = PriorityQueue<Point> { a, b ->
-        when {
-            a.distance < b.distance -> 1
-            a.distance > b.distance -> -1
-            else -> 0
-        }
-    }
-    // val maxHeap = PriorityQueue<Point> { a, b -> b.distance.compareTo(a.distance) }
+    val maxHeap = PriorityQueue<Point>(compareByDescending { it.distance })
 
     points.forEach {
         val newPoint = Point(getDistance(it), it[0], it[1])
@@ -38,16 +76,10 @@ fun kClosest(points: Array<IntArray>, k: Int): Array<IntArray> {
 }
 
 /**
- * Second attempt.
+ * Second attempt. This is O(n logn) time complexity and O(n) space complexity.
  */
 fun kClosest2(points: Array<IntArray>, k: Int): Array<IntArray> {
-    val minHeap = PriorityQueue<Point> { a, b ->
-        when {
-            a.distance < b.distance -> -1
-            a.distance > b.distance -> 1
-            else -> 0
-        }
-    }
+    val minHeap = PriorityQueue<Point>(compareBy { it.distance })
 
     points.forEach {
         val newPoint = Point(getDistance(it), it[0], it[1])
@@ -63,21 +95,15 @@ fun kClosest2(points: Array<IntArray>, k: Int): Array<IntArray> {
 }
 
 /**
- * My first attempt.
+ * First attempt — INCORRECT for duplicate distances.
  *
- * Positive aspects:
- * 1.The overall approach using a min-heap (PriorityQueue) is correct
- * and efficient.
- * 2.The distance calculation function is implemented correctly.
- * 3.The code handles the input and output formats properly.
+ * Uses a min-heap of distances paired with a Map<Double, IntArray> for lookup.
+ * Bug: map keys are distances, so two points at the same distance overwrite each other.
+ * The overwritten point is lost; the subsequent map lookup returns null and is silently
+ * skipped, producing a result with fewer than k elements.
  *
- * Areas for improvement:
- * 1.Using a map to store distances and points can lead to issues if
- * multiple points have the same distance. This could result in
- * losing some points.
- * 2.The current implementation has a time complexity of O(n log n)
- * due to adding all points to the heap. It can be optimized to O(n log k)
- * 3.Unnecessary use of Double for distances when Float would suffice.
+ * Time:  O(n log n) — all points enter the heap
+ * Space: O(n)
  */
 fun kClosest1(points: Array<IntArray>, k: Int): Array<IntArray> {
     val minHeap = PriorityQueue<Double>()
@@ -108,6 +134,7 @@ fun main() {
         intArrayOf(-2, 2)
     )
     println(kClosest(points, 1).contentDeepToString()) // [[-2, 2]]
+    println(kClosest0(points, 1).contentDeepToString()) // [[-2, 2]]
 
     points = arrayOf(
         intArrayOf(3, 3),
@@ -115,10 +142,12 @@ fun main() {
         intArrayOf(-2, 4)
     )
     println(kClosest(points, 2).contentDeepToString())  // [[3, 3], [-2, 4]]
+    println(kClosest0(points, 2).contentDeepToString())  // [[3, 3], [-2, 4]]
 
     points = arrayOf(
         intArrayOf(0, 1),
         intArrayOf(1, 0)
     )
     println(kClosest(points, 2).contentDeepToString()) // [[0,1],[1,0]]
+    println(kClosest0(points, 2).contentDeepToString()) // [[0,1],[1,0]]
 }
