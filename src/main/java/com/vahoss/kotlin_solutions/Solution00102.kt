@@ -6,6 +6,42 @@ import kotlin.collections.ArrayList
 
 
 class Solution00102 {
+    /**
+     * Recursive DFS: groups nodes by depth via a pre-order traversal.
+     *
+     * Time:  O(n) every node is visited exactly once.
+     * Space: O(h) auxiliary for the call stack, where h is the tree height.
+     *        O(log n) for a balanced tree; O(n) worst case for a skewed tree.
+     *        O(n) for the output.
+     */
+    fun levelOrder(root: TreeNode?): List<List<Int>> {
+        if (root == null) return emptyList()
+
+        val result = mutableListOf<MutableList<Int>>()
+        levelOrderRecursive(root, result, 0)
+
+        return result
+    }
+
+    private fun levelOrderRecursive(
+        root: TreeNode,
+        result: MutableList<MutableList<Int>>,
+        level: Int
+    ) {
+        if (level + 1 > result.size) result.add(mutableListOf())
+        result[level].add(root.`val`)
+        root.left?.let { levelOrderRecursive(it, result, level + 1) }
+        root.right?.let { levelOrderRecursive(it, result, level + 1) }
+    }
+
+    /**
+     * Iterative BFS: snapshots queue size before each level to group nodes.
+     *
+     * Time:  O(n) every node is enqueued and dequeued exactly once.
+     * Space: O(w) auxiliary for the queue, where w is the maximum tree width.
+     *        O(n) worst case for a complete tree (last level holds ≈ n/2 nodes).
+     *        O(n) for the output.
+     */
     fun levelOrderBFS(root: TreeNode?): List<List<Int>> {
         val result = ArrayList<List<Int>>()
         val queue = ArrayDeque<TreeNode>()
@@ -28,49 +64,6 @@ class Solution00102 {
 
         return result
     }
-
-    fun levelOrder(root: TreeNode?): List<List<Int>> {
-        val result = ArrayList<ArrayList<Int>>()
-        val queue = ArrayDeque<NodeWithDepth>()
-
-        root?.let {
-            queue.add(NodeWithDepth(it, 0))
-        } ?: return result
-
-        while (!queue.isEmpty()) {
-            val current = queue.removeFirst()
-            // Ensure result has a list for this depth
-            if (result.size <= current.depth) result.add(ArrayList())
-
-            // Add current node's value to its level's list
-            result[current.depth].add(current.treeNode.`val`)
-
-            current.treeNode.left?.let {
-                queue.add(NodeWithDepth(it, current.depth + 1))
-            }
-            current.treeNode.right?.let {
-                queue.add(NodeWithDepth(it, current.depth + 1))
-            }
-        }
-
-        return result
-    }
-
-    data class NodeWithDepth(val treeNode: TreeNode, val depth: Int)
-
-    fun levelOrderDFS(root: TreeNode?): List<List<Int>> {
-        val result = mutableListOf<MutableList<Int>>()
-        root?.let { levelHelper(result, it, 0) }
-        return result
-    }
-
-    private fun levelHelper(result: MutableList<MutableList<Int>>, node: TreeNode, d: Int) {
-        while (result.size - 1 < d) result.add(mutableListOf())
-        result[d].add(node.`val`)
-
-        node.left?.let { levelHelper(result, it, d + 1) }
-        node.right?.let { levelHelper(result, it, d + 1) }
-    }
 }
 
 fun main() {
@@ -83,7 +76,6 @@ fun main() {
 
     println(s.levelOrder(t))
     println(s.levelOrderBFS(t))
-    println(s.levelOrderDFS(t))
 
     t = TreeNode(3)
     t.left = TreeNode(9)
@@ -93,5 +85,4 @@ fun main() {
 
     println(s.levelOrder(t))
     println(s.levelOrderBFS(t))
-    println(s.levelOrderDFS(t))
 }
