@@ -98,3 +98,7 @@ Thumbs.db
 .cache-main
 .scala_dependencies
 .worksheet
+
+# Ignore questions in these folders
+/src/main/java/com/vahoss/cse/
+/src/main/java/com/vahoss/public_safety/
