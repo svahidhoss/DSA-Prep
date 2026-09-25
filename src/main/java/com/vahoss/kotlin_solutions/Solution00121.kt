@@ -7,6 +7,7 @@ class Solution00121 {
 
     /**
      * Single pass solution: the most optimized.
+     *
      * Time complexity: O(n) - single pass
      * Space complexity: O(1) - only two variables
      */
@@ -42,7 +43,16 @@ class Solution00121 {
     }
 
     /**
-     * This is not going to work for the problem
+     * Attempted approach: two pointers converging from both ends, tracking a running min
+     * from the left frontier and a running max from the right frontier, crediting profit
+     * when maxIndex > minIndex.
+     *
+     * BROKEN. Confirmed failing, e.g. [5, 20, 1, 10] -> returns 5, correct answer is 15.
+     * Root cause: the `else break` aborts the whole scan the instant one snapshot's
+     * maxIndex/minIndex ordering fails, discarding pairs it hasn't reached yet. More
+     * fundamentally, pairing "min of the left frontier" with "max of the right frontier"
+     * isn't a valid search over all buy/sell index pairs - same class of bug as the
+     * sorted two-pointer approach that failed on problem 416.
      */
     fun maxProfitTwoPointer(prices: IntArray): Int {
         var maxValue = prices.last()
@@ -73,8 +83,16 @@ class Solution00121 {
     }
 
     /**
-     * This is still a O(n^2) solution:
-     * Not optimal.
+     * Attempted approach: recursively shrink from both ends (beg+1 or end-1), branching
+     * both ways and taking the max, with an early return when the current pair already
+     * beats the incoming best.
+     *
+     * BROKEN, and the complexity claim above was also wrong. This isn't O(n^2) - with no
+     * memoization it's exponential (the same (beg,end) state gets recomputed via many
+     * different call paths). It's also incorrect: e.g. [2, 4, 1, 7] -> returns 5, correct
+     * answer is 6. Root cause: `if (diff > result) return updatedResult` stops recursing
+     * down that branch as soon as it finds ANY improvement, assuming nothing better exists
+     * further down - that assumption is false, and cuts off the search too early.
      */
     fun maxProfit1(prices: IntArray): Int {
         // starting from prices index, find the 1st minimum
@@ -95,29 +113,10 @@ class Solution00121 {
         )
     }
 
-    fun maxProfit2(prices: IntArray): Int {
-        val map = mutableMapOf<Int, Int>()
-        prices.forEachIndexed { i, v ->
-            map[v] = i
-        }
-
-        // Now sort the list and start checking max and min
-        prices.sort()
-        var p = 0
-        var q = prices.size - 1
-        while (p < q) {
-            val minPrice = prices[p]
-            val maxPrice = prices[q]
-
-            if (map[minPrice]!! < map[maxPrice]!!) return maxPrice - minPrice
-            else if (map[minPrice]!! > map[maxPrice]!!) q--
-            else p++
-        }
-
-        // No profit achieved
-        return 0
-    }
-
+    /**
+     * Brute force: every (i, j) pair with i < j, no pruning.
+     * Correct baseline. O(n^2) time, O(1) space.
+     */
     fun maxProfitBruteForce(prices: IntArray): Int {
         var maxProfit = 0
         for (i in prices.indices) {
@@ -132,29 +131,24 @@ class Solution00121 {
 
 fun main() {
     val sol = Solution00121()
-    println(sol.maxProfit(intArrayOf(7, 1, 5, 3, 6, 4)))
-    println(sol.maxProfit0(intArrayOf(7, 1, 5, 3, 6, 4)))
 
-    println(sol.maxProfit(intArrayOf(7, 6, 4, 3, 1)))
-    println(sol.maxProfit0(intArrayOf(7, 6, 4, 3, 1)))
+    data class TestCase(val prices: IntArray, val expected: Int)
 
-    println(sol.maxProfit(intArrayOf(2, 4, 1)))
-    println(sol.maxProfit0(intArrayOf(2, 4, 1)))
+    val testCases = listOf(
+        TestCase(intArrayOf(7, 1, 5, 3, 6, 4), 5),
+        TestCase(intArrayOf(7, 6, 4, 3, 1), 0),
+        TestCase(intArrayOf(2, 4, 1), 2),
+        TestCase(intArrayOf(2, 4, 1, 7), 6),
+        TestCase(intArrayOf(2, 1, 2, 1, 0, 0, 1), 1),
+        TestCase(intArrayOf(3, 3, 5, 0, 0, 3, 1, 4), 4),
+        TestCase(intArrayOf(5, 1, 5, 6, 3, 1, 8), 7),
+        TestCase(intArrayOf(5, 10, 1, 9, 3), 8),
+    )
 
-    println(sol.maxProfit(intArrayOf(2, 4, 1, 7)))
-    println(sol.maxProfit0(intArrayOf(2, 4, 1, 7)))
-
-    println(sol.maxProfit(intArrayOf(7, 1, 5, 3, 6, 4)))
-    println(sol.maxProfit0(intArrayOf(7, 1, 5, 3, 6, 4)))
-
-    println(sol.maxProfit(intArrayOf(2, 1, 2, 1, 0, 0, 1)))
-    println(sol.maxProfit0(intArrayOf(2, 1, 2, 1, 0, 0, 1)))
-    println(sol.maxProfitTwoPointer(intArrayOf(2, 1, 2, 1, 0, 0, 1)))
-
-    println(sol.maxProfit(intArrayOf(3, 3, 5, 0, 0, 3, 1, 4)))
-    println(sol.maxProfit0(intArrayOf(3, 3, 5, 0, 0, 3, 1, 4)))
-    println(sol.maxProfit(intArrayOf(5, 1, 5, 6, 3, 1, 8)))
-    println(sol.maxProfit0(intArrayOf(5, 1, 5, 6, 3, 1, 8)))
-    println(sol.maxProfit(intArrayOf(5, 10, 1, 9, 3)))
-    println(sol.maxProfit0(intArrayOf(5, 10, 1, 9, 3)))
+    for (tc in testCases) {
+        println(
+            "maxProfit: ${sol.maxProfit(tc.prices)}, maxProfit0: ${sol.maxProfit0(tc.prices)}" +
+                    ", Expected: ${tc.expected}"
+        )
+    }
 }
