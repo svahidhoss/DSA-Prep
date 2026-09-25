@@ -1,6 +1,31 @@
 package com.vahoss.kotlin_solutions
 
+import kotlin.math.max
+
 class Solution00003 {
+
+    /**
+     * Sliding window with a HashMap (char → last seen index).
+     * Jumps the left boundary directly past the previous occurrence — no inner loop.
+     * Same algorithm as [lengthOfLongestSubstringHashMap] below, written with forEachIndexed.
+     * Time: O(n) — single pass.
+     * Space: O(min(n, |charset|))
+     */
+    fun lengthOfLongestSubstring(s: String): Int {
+        val map = mutableMapOf<Char, Int>()
+        var longest = 0
+        var p = 0
+        s.forEachIndexed { i, ch ->
+            // single lookup: map[ch] is null if ch hasn't been seen, no need for a
+            // separate contains() check + !! (that would hash/search twice for one key)
+            map[ch]?.let {
+                p = max(it + 1, p)
+            }
+            map[ch] = i
+            longest = max(longest, i - p + 1)
+        }
+        return longest
+    }
 
     /**
      * Sliding window with a HashSet.
@@ -8,7 +33,7 @@ class Solution00003 {
      * Time: O(n) — each char enters and leaves the set at most once.
      * Space: O(min(n, |charset|))
      */
-    fun lengthOfLongestSubstring(s: String): Int {
+    fun lengthOfLongestSubstringSet(s: String): Int {
         if (s.length <= 1) return s.length
 
         var beg = 0
@@ -79,6 +104,6 @@ fun main() {
         val r2 = sol.lengthOfLongestSubstringHashMap(s)
         val status1 = if (r1 == expected) "PASS" else "FAIL (got $r1)"
         val status2 = if (r2 == expected) "PASS" else "FAIL (got $r2)"
-        println("\"$s\" → set:$status1  map:$status2")
+        println("\"$s\" → set:$status1  map:$status2  expected:$expected")
     }
 }
