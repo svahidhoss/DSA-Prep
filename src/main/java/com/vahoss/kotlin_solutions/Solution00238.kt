@@ -26,6 +26,11 @@ class Solution0238 {
         return output
     }
 
+    /**
+     * Prefix/suffix product arrays: left[i] = product of everything before i,
+     * right[i] = product of everything after i, answer[i] = left[i] * right[i].
+     * Time: O(n). Space: O(n) extra (left + right arrays, plus the zip result).
+     */
     fun productExceptSelf(nums: IntArray): IntArray {
         val n = nums.size
         val left = IntArray(n) { 1 }

@@ -28,6 +28,8 @@ class Solution00121 {
      *
      * You’ve seen all prices up to this point.
      * You’ve tracked the best buying opportunity so far (minPrice).
+     *
+     * Time: O(n) - single pass. Space: O(1).
      */
     fun maxProfit(prices: IntArray): Int {
         var minPrice = Int.MAX_VALUE
@@ -53,6 +55,8 @@ class Solution00121 {
      * fundamentally, pairing "min of the left frontier" with "max of the right frontier"
      * isn't a valid search over all buy/sell index pairs - same class of bug as the
      * sorted two-pointer approach that failed on problem 416.
+     *
+     * Intended: Time O(n) - single pass. Space O(1). Moot, since it's wrong.
      */
     fun maxProfitTwoPointer(prices: IntArray): Int {
         var maxValue = prices.last()
@@ -93,6 +97,8 @@ class Solution00121 {
      * answer is 6. Root cause: `if (diff > result) return updatedResult` stops recursing
      * down that branch as soon as it finds ANY improvement, assuming nothing better exists
      * further down - that assumption is false, and cuts off the search too early.
+     *
+     * Time: O(2^n) worst case - exponential, no memoization. Space: O(n) recursion depth.
      */
     fun maxProfit1(prices: IntArray): Int {
         // starting from prices index, find the 1st minimum
