@@ -47,12 +47,15 @@ fun letterCombinations(digits: String): List<String> {
  * Space: O(4^n * n) for the output; the per-digit temporary list is no larger than it.
  */
 fun letterCombinationsFlatMap(digits: String): List<String> {
+    // No digits means no combinations; without this guard we'd return [""] instead of [].
     if (digits.isEmpty()) return emptyList()
-
+    // has 1 item: the empty string ""
     var result = listOf("")
     for (digit in digits) {
         // getValue throws on a digit outside 2-9 instead of silently dropping it.
         val letters = map.getValue(digit)
+        // For each existing prefix, map builds its extensions (one per letter);
+        // flatMap merges all those lists into one flat list.
         result = result.flatMap { prefix -> letters.map { prefix + it } }
     }
     return result
