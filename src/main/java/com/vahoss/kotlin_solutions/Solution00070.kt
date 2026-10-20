@@ -50,6 +50,37 @@ class Solution00070 {
         return map[n]!!
     }
 
+    /**
+     * Bottom-up dynamic programming (tabulation): fill a table from the smallest
+     * subproblem upwards instead of recursing down from n.
+     *
+     * ways[i] = number of ways to reach stair i = ways[i - 1] + ways[i - 2], because the
+     * last move onto stair i was either a 1-step from i - 1 or a 2-step from i - 2.
+     *
+     * Time Complexity: O(n), one pass with O(1) work per stair.
+     * Space Complexity: O(n) for the table; no recursion, so no call-stack cost.
+     * Only the previous two entries are ever read, so two variables would reduce
+     * the space to O(1).
+     */
+    fun climbStairsBottomUp(n: Int): Int {
+        // Stairs 0..2 are their own answer (0 -> 0, 1 -> 1, 2 -> 2), which also keeps
+        // the table below from indexing past its end when n is small.
+        if (n <= 2) return n
+
+        // ways[i] holds the answer for i stairs; index 0 is unused.
+        val ways = IntArray(n + 1)
+        // Base cases: one way to reach stair 1 (1), two ways to reach stair 2 (1+1, 2).
+        ways[1] = 1
+        ways[2] = 2
+
+        // Each stair depends only on the two stairs below it, which are already filled in.
+        for (i in 3..n) {
+            ways[i] = ways[i - 1] + ways[i - 2]
+        }
+
+        return ways[n]
+    }
+
     private fun naiveWithCount(n: Int, counter: IntArray): Int {
         // Mirrors climbStairsNonOptimized, but counts calls for comparison output.
         counter[0]++
@@ -106,15 +137,16 @@ fun main() {
     val s = Solution00070()
 
     // Covers small inputs, a medium input, and n = 45, which is the largest LeetCode constraint.
-    val testCases = mapOf(1 to 1, 2 to 2, 3 to 3, 5 to 8, 10 to 89, 45 to 1134903170)
+    val testCases = mapOf(1 to 1, 2 to 2, 3 to 3, 5 to 8, 10 to 89, 45 to 1836311903)
 
-    println("n\texpected\tnaive\t\tmemo\t\tpass?")
+    println("n\texpected\tnaive\t\tmemo\t\tbottom-up\tpass?")
     for ((n, expected) in testCases) {
         // Skip the brute-force version for large n because it is intentionally exponential.
         val naive = if (n <= 40) s.climbStairsNonOptimized(n) else -1
         val memo = s.climbStairs(n)
+        val bottomUp = s.climbStairsBottomUp(n)
         val naiveMatches = naive == expected || naive == -1
-        println("$n\t$expected\t\t$naive\t\t$memo\t\t${naiveMatches && memo == expected}")
+        println("$n\t$expected\t\t$naive\t\t$memo\t\t$bottomUp\t\t${naiveMatches && memo == expected && bottomUp == expected}")
     }
 
     println("\n=== Call count comparison ===")
