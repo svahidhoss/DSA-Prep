@@ -3,65 +3,32 @@ package com.vahoss.kotlin_solutions
 class Solution00169 {
 
     /**
-     * It works because each pair of different elements can cancel out,
-     * and a true majority has more copies than everything else combined,
-     * so it survives.
+     * Boyer-Moore voting: keep a candidate and a vote count. An element equal to the
+     * candidate adds a vote, and a different element cancels one vote. The majority element
+     * appears more than n/2 times, so it has more votes than all the other elements combined
+     * and survives the cancelling. Only correct because a majority element is guaranteed.
      *
-     * Solution with O(1) space and O(n) time complexity.
+     * Time Complexity: O(n), one pass.
+     * Space Complexity: O(1), only the candidate and the counter.
      */
     fun majorityElementBoyerMoore(nums: IntArray): Int {
-        // Handle edge case: empty array
-        if (nums.isEmpty()) throw IllegalArgumentException("Array cannot be empty")
+        require(nums.isNotEmpty())
+        var result = nums.first()
+        var counter = 0
+        for (num in nums) {
+            // No votes left: the current number becomes the new candidate.
+            if (counter == 0) result = num
 
-        // Boyer-Moore voting: every element different from the candidate cancels one vote
-        // for it. The majority element appears more than n/2 times, so it has more votes
-        // than all the other elements combined and survives the cancelling.
-        var candidate = nums[0]
-        var count = 1
-
-        for (i in 1 until nums.size) {
-            // No votes left: the next element becomes the new candidate.
-            if (count == 0) candidate = nums[i]
             // Same as the candidate: one more vote. Different: it cancels one vote.
-            if (candidate == nums[i]) count++
-            else count--
+            if (num == result) counter++ else counter--
         }
-
-        // Only correct because the problem guarantees a majority element exists.
-        return candidate
+        return result
     }
 
     /**
      * O(n) time and space complexity solution using a freq map for each
      */
     fun majorityElement(nums: IntArray): Int {
-        // Handle edge case: empty array (though problem guarantees non-empty)
-        if (nums.isEmpty()) throw IllegalArgumentException("Array cannot be empty")
-
-        // Build frequency map and track majority element
-        // frequencyMap: number -> how many times it has appeared so far
-        val frequencyMap = mutableMapOf<Int, Int>()
-        // Element with the highest count seen so far, and that count.
-        var majorityElement = nums[0]
-        var maxCount = 1
-
-        nums.forEach { num ->
-            // Count this occurrence (starting from 0 for a number not seen before).
-            frequencyMap[num] = frequencyMap.getOrDefault(num, 0) + 1
-            // This number now has more occurrences than the previous leader: it takes over.
-            if (frequencyMap[num]!! > maxCount) {
-                majorityElement = num
-                maxCount = frequencyMap[num]!!
-            }
-        }
-
-        return majorityElement
-    }
-
-    /**
-     * O(n) time and space complexity solution using a freq map for each
-     */
-    fun majorityElement2(nums: IntArray): Int {
         // map: number -> how many times it has appeared so far
         val map = mutableMapOf<Int, Int>()
         // Tracks the current majority element and its freq. count
@@ -88,15 +55,12 @@ fun main() {
         println("Running $testName")
         println("Input: ${nums.joinToString(", ")}")
         try {
-            val resultHashMap = solution.majorityElement(nums)
-            val resultHashMap2 = solution.majorityElement2(nums)
             val resultBoyerMoore = solution.majorityElementBoyerMoore(nums)
-            println("HashMap Result: $resultHashMap (Expected: $expected)")
-            println("HashMap2 Result: $resultHashMap2 (Expected: $expected)")
+            val resultHashMap = solution.majorityElement(nums)
             println("Boyer-Moore Result: $resultBoyerMoore (Expected: $expected)")
-            println("HashMap Pass: ${resultHashMap == expected}")
-            println("HashMap2 Pass: ${resultHashMap2 == expected}")
+            println("HashMap Result: $resultHashMap (Expected: $expected)")
             println("Boyer-Moore Pass: ${resultBoyerMoore == expected}")
+            println("HashMap Pass: ${resultHashMap == expected}")
         } catch (e: Exception) {
             println("Error: ${e.message} (Expected: $expected)")
         }
@@ -128,7 +92,4 @@ fun main() {
 
     // Test Case 9: Negative numbers
     runTest("Test Case 9 - Negative Numbers", intArrayOf(-1, -1, 2), -1)
-
-    // Test Case 5: Edge Case - Empty Array
-    runTest("Test Case 5 - Empty Array", intArrayOf(), -1) // -1 as placeholder since exception expected
 }

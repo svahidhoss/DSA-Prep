@@ -24,7 +24,7 @@ class Node(var `val`: Int) {
 }
 
 /**
- * Definition for a graph node.
+ * Definition for a graph node (Question 133 - Clone Graph).
  */
 class GraphNode(var `val`: Int) {
     var neighbors: ArrayList<GraphNode?> = ArrayList<GraphNode?>()
@@ -38,7 +38,7 @@ fun isFull(tree: TreeNode?): Boolean {
 }
 
 fun isPerfect(root: TreeNode?): Boolean {
-    // TODO implemet it recursively
+    // TODO implement it recursively
 //    val d = depth(root)
     return isPerfect(root, depth(root), 0)
 }
